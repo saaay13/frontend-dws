@@ -4,8 +4,11 @@ import { authService } from '../services/auth';
 interface User {
     id: number;
     name: string;
+    apellidos: string;
     email: string;
     rol: 'administrador' | 'vendedor' | 'cliente';
+    ci?: string;
+    telefono?: string;
 }
 
 interface AuthContextType {

@@ -1,15 +1,35 @@
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'http://127.0.0.1:8000/api';
+
+const getCookie = (name: string): string | undefined => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+    return undefined;
+};
 
 const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
     const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
 
-    const defaultHeaders = {
+    const token = localStorage.getItem('token');
+    const csrfToken = getCookie('XSRF-TOKEN');
+
+    const defaultHeaders: Record<string, string> = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
     };
+
+    if (token) {
+        defaultHeaders['Authorization'] = `Bearer ${token}`;
+    }
+
+    if (csrfToken) {
+        defaultHeaders['X-XSRF-TOKEN'] = decodeURIComponent(csrfToken);
+    }
 
     const config = {
         ...options,
+        credentials: 'include' as RequestCredentials,
         headers: {
             ...defaultHeaders,
             ...options.headers,

@@ -51,13 +51,23 @@ const Navbar: React.FC = () => {
                         </>
                     )}
 
-                    {isLanding || isLogin ? (
-                        <Button
-                            variant="primary"
-                            onClick={() => navigate('/login')}
-                        >
-                            Iniciar Sesión
-                        </Button>
+                    {isLanding || isLogin || location.pathname === '/register' ? (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="ghost"
+                                onClick={() => navigate('/login')}
+                                className={isLogin ? 'text-primary' : ''}
+                            >
+                                Ingresar
+                            </Button>
+                            <Button
+                                variant="primary"
+                                onClick={() => navigate('/register')}
+                                className={location.pathname === '/register' ? 'bg-primary-600' : ''}
+                            >
+                                Registrarse
+                            </Button>
+                        </div>
                     ) : (
                         <div className="flex items-center space-x-4">
                             <Button

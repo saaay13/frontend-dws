@@ -1,75 +1,133 @@
-import React, { useState } from 'react';
-import { Button, Input, Card } from '../components/atoms';
-import { authService } from '../services/auth';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Button, Input } from '../components/atoms';
+import { useLogin } from '../hooks/useLogin';
+import { Link } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
-
-        try {
-            await authService.login({ email, password });
-            navigate('/dashboard');
-        } catch (err: any) {
-            setError(err.message || 'Error al iniciar sesión. Verifica tus credenciales.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        loading,
+        error,
+        handleLogin
+    } = useLogin();
 
     return (
-        <div className="flex items-center justify-center relative overflow-hidden p-6 py-20 bg-[radial-gradient(circle_at_top_right,var(--primary-100),transparent_40%),radial-gradient(circle_at_bottom_left,var(--secondary-100),transparent_40%)]">
-            <Card className="w-full max-w-md shadow-2xl" title="Bienvenido de nuevo" subtitle="Ingresa tus credenciales para acceder a la Store">
-                <form onSubmit={handleLogin} className="space-y-6">
-                    {error && (
-                        <div className="p-3 rounded-md bg-error/10 border border-error text-error text-sm font-medium">
-                            {error}
+        <div className="min-h-[calc(100vh-64px)] w-full flex items-center justify-center p-4 relative overflow-hidden mesh-gradient">
+            {/* Background Blobs */}
+            <div className="blob top-[-10%] left-[-10%] bg-primary-200" />
+            <div className="blob bottom-[-10%] right-[-10%] bg-secondary-200" style={{ animationDelay: '-5s' }} />
+
+            <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] glass-card border-white/20">
+
+                {/* Visual Side */}
+                <div className="hidden lg:flex flex-col justify-between p-12 bg-primary-600 text-white relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop')] mix-blend-overlay opacity-40 bg-cover bg-center"></div>
+
+                    <div className="relative z-10">
+                        <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-8 border border-white/30">
+                            <span className="text-2xl font-black italic">SD</span>
                         </div>
-                    )}
-                    <Input
-                        label="Correo Electrónico"
-                        type="email"
-                        placeholder="tu@correo.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                    <Input
-                        label="Contraseña"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <div className="flex items-center justify-between text-sm">
-                        <label className="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" className="rounded border-input text-primary focus:ring-primary" />
-                            <span className="text-muted-foreground">Recordarme</span>
-                        </label>
-                        <a href="#" className="text-primary font-medium hover:underline">¿Olvidaste tu contraseña?</a>
+                        <h1 className="text-4xl font-black mb-4 leading-tight">Gestiona tu tienda con elegancia.</h1>
+                        <p className="text-primary-100 text-lg leading-relaxed max-w-sm">
+                            Bienvenido a DryWall System. El centro de control definitivo para tu inventario, ventas y clientes.
+                        </p>
                     </div>
-                    <Button
-                        type="submit"
-                        variant="primary"
-                        className="w-full"
-                        disabled={loading}
-                    >
-                        {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-                    </Button>
-                </form>
-                <p className="mt-8 text-center text-sm text-muted-foreground">
-                    ¿No tienes una cuenta? <a href="#" className="text-primary font-bold hover:underline">Regístrate gratis</a>
-                </p>
-            </Card>
+
+                    <div className="relative z-10 pt-12">
+                        <div className="flex -space-x-3 mb-4">
+                            {[1, 2, 3, 4].map(i => (
+                                <div key={i} className="h-10 w-10 rounded-full border-2 border-primary-600 bg-primary-200 flex items-center justify-center text-[10px] font-bold overflow-hidden shadow-lg">
+                                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="user" />
+                                </div>
+                            ))}
+                            <div className="h-10 w-10 rounded-full border-2 border-primary-600 bg-primary-400 flex items-center justify-center text-[10px] font-bold shadow-lg">
+                                +50
+                            </div>
+                        </div>
+                        <p className="text-sm font-medium text-primary-200">
+                            Únete a más de 50 administradores exitosos.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Form Side */}
+                <div className="p-8 lg:p-16 bg-white/40 backdrop-blur-md flex flex-col justify-center">
+                    <div className="mb-10 text-center lg:text-left">
+                        <h2 className="text-3xl font-black text-foreground mb-2">Ingresa a tu cuenta</h2>
+                        <p className="text-muted-foreground">Bienvenido de nuevo, por favor ingresa tus datos.</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="space-y-6">
+                        {error && (
+                            <div className="p-4 rounded-2xl bg-error/10 border border-error/20 text-error text-sm font-semibold flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+                                <span className="h-2 w-2 rounded-full bg-error"></span>
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="space-y-5">
+                            <Input
+                                label="Correo Electrónico"
+                                type="email"
+                                placeholder="nombre@ejemplo.com"
+                                className="premium-input h-12 rounded-xl"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <div className="space-y-1">
+                                <Input
+                                    label="Contraseña"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    className="premium-input h-12 rounded-xl"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <div className="flex justify-end pt-1">
+                                    <button type="button" className="text-xs font-bold text-primary hover:text-primary-400 transition-colors">
+                                        ¿Olvidaste tu contraseña?
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 py-2">
+                            <input type="checkbox" id="remember" className="h-4 w-4 rounded-md border-neutral-300 text-primary focus:ring-primary/20 accent-primary" />
+                            <label htmlFor="remember" className="text-sm font-medium text-muted-foreground select-none cursor-pointer">Mantener sesión iniciada</label>
+                        </div>
+
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            className="w-full h-12 rounded-xl text-md font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <span className="flex items-center gap-2">
+                                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Iniciando...
+                                </span>
+                            ) : 'Iniciar Sesión'}
+                        </Button>
+                    </form>
+
+                    <p className="mt-12 text-center text-sm text-muted-foreground">
+                        ¿Aún no tienes cuenta? {' '}
+                        <Link to="/register" className="text-primary font-black hover:underline underline-offset-4">
+                            Regístrate aquí
+                        </Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 };

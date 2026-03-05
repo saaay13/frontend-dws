@@ -2,11 +2,13 @@ import apiFetch from './api';
 
 export const authService = {
     async login(credentials: any) {
-        await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+        await fetch('http://127.0.0.1:8000/sanctum/csrf-cookie', {
             method: 'GET',
+            credentials: 'include',
         });
 
-        return apiFetch('/login', {
+
+        return apiFetch('http://127.0.0.1:8000/login', {
             method: 'POST',
             body: JSON.stringify(credentials),
         });

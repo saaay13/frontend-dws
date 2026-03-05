@@ -1,20 +1,16 @@
-import React from 'react';
-import Navbar from '../../organisms/Navbar';
+import { Outlet } from 'react-router-dom';
+import Navbar from '../../organisms';
 
-interface MainLayoutProps {
-    children: React.ReactNode;
-}
-
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC = () => {
     return (
         <div className="min-h-screen bg-background text-foreground flex flex-col">
             <Navbar />
             <main className="flex-grow">
-                {children}
+                <Outlet />
             </main>
             <footer className="p-8 border-t bg-muted/30">
                 <div className="max-w-7xl mx-auto text-center text-muted-foreground text-sm">
-                    <p>© 2026 Store DWS. Diseñado con pasión.</p>
+                    <p>© 2026 DryWall System</p>
                 </div>
             </footer>
         </div>

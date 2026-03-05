@@ -1,23 +1,46 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../atoms';
-import { authService } from '../../../services/auth';
+import { useAuth } from '../../../context/AuthContext';
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, logout } = useAuth();
 
     const handleLogout = async () => {
         try {
-            await authService.logout();
+            await logout();
             navigate('/login');
         } catch (err) {
             navigate('/login');
         }
     };
 
-    const isLanding = location.pathname === '/';
-    const isLogin = location.pathname === '/login';
+    const menuItems = {
+        administrador: [
+            { label: 'Dashboard', path: '/dashboard' },
+            { label: 'Productos', path: '/products' },
+            { label: 'Categorías', path: '/categories' },
+            { label: 'Usuarios', path: '/users' },
+            { label: 'Inventario', path: '/products' },
+            { label: 'Ventas', path: '/sales' },],
+        vendedor: [
+            { label: 'Dashboard', path: '/dashboard' },
+            { label: 'Inventario', path: '/products' },
+            { label: 'Ventas', path: '/sales' },
+        ],
+        cliente: [
+            { label: 'Inicio', path: '/' },
+            { label: 'Productos', path: '/products' },
+            { label: 'Mis Compras', path: '/my-purchases' },
+        ],
+
+    };
+
+    const currentMenu = user ? menuItems[user.rol as keyof typeof menuItems] || [] : [];
+
+    const isLoginOrRegister = ['/login', '/register'].includes(location.pathname);
 
     return (
         <nav className="glass sticky top-0 z-50 border-b p-4">
@@ -26,63 +49,65 @@ const Navbar: React.FC = () => {
                     className="flex items-center space-x-2 cursor-pointer"
                     onClick={() => navigate('/')}
                 >
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-400 bg-clip-text text-transparent">
-                        Store DWS
+                    <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center text-white font-black italic shadow-lg shadow-primary/20">
+                        DS
+                    </div>
+                    <h1 className="text-xl font-black bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent hidden sm:block">
+                        DryWall System
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    {!isLogin && (
-                        <>
+                {/* Centered Desktop Menu */}
+                {user && (
+                    <div className="hidden md:flex items-center gap-2">
+                        {currentMenu.map((item) => (
                             <Button
+                                key={item.path}
                                 variant="ghost"
-                                className="hidden md:flex"
-                                onClick={() => navigate('/')}
+                                size="sm"
+                                onClick={() => navigate(item.path)}
+                                className={`font-bold rounded-lg ${location.pathname === item.path ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`}
                             >
-                                Inicio
+                                {item.label}
                             </Button>
-                            <Button
-                                variant="ghost"
-                                className="hidden md:flex"
-                                onClick={() => navigate('/products')}
-                            >
-                                Productos
-                            </Button>
-                        </>
-                    )}
+                        ))}
+                    </div>
+                )}
 
-                    {isLanding || isLogin || location.pathname === '/register' ? (
-                        <div className="flex items-center gap-2">
-                            <Button
-                                variant="ghost"
-                                onClick={() => navigate('/login')}
-                                className={isLogin ? 'text-primary' : ''}
-                            >
-                                Ingresar
-                            </Button>
+                <div className="flex items-center gap-3">
+                    {!user ? (
+                        <>
+                            {!isLoginOrRegister && (
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => navigate('/login')}
+                                    className="font-bold"
+                                >
+                                    Ingresar
+                                </Button>
+                            )}
                             <Button
                                 variant="primary"
                                 onClick={() => navigate('/register')}
-                                className={location.pathname === '/register' ? 'bg-primary-600' : ''}
+                                className="font-bold shadow-lg shadow-primary/20"
                             >
-                                Registrarse
+                                {location.pathname === '/register' ? 'Unirse ahora' : 'Registrarse'}
                             </Button>
-                        </div>
+                        </>
                     ) : (
-                        <div className="flex items-center space-x-4">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => navigate('/dashboard')}
-                                className="hidden sm:flex"
-                            >
-                                Dashboard
-                            </Button>
-                            <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Admin</span>
+                        <div className="flex items-center gap-4">
+                            <div className="hidden sm:flex flex-col items-end">
+                                <span className="text-sm font-black text-foreground leading-none">{user.name}</span>
+                                <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{user.rol}</span>
+                            </div>
+                            <div className="h-10 w-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden">
+                                <img src={`https://ui-avatars.com/api/?name=${user.name}&background=random`} alt="avatar" />
+                            </div>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={handleLogout}
+                                className="rounded-xl border-neutral-200 hover:bg-error/5 hover:text-error hover:border-error/20 transition-all"
                             >
                                 Salir
                             </Button>

@@ -21,30 +21,18 @@ const RegisterPage: React.FC = () => {
             <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] glass-card border-white/20">
 
                 {/* Visual Side */}
-                <div className="hidden lg:flex flex-col justify-between p-12 bg-secondary-600 text-white relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop')] mix-blend-overlay opacity-40 bg-cover bg-center"></div>
+                <div className="hidden lg:flex flex-col justify-between p-12 bg-primary-950 text-white relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://www.denat.com.ar/wp-content/uploads/2024/08/construccion-en-seco-2-scaled-1.jpg')] opacity-60 bg-cover bg-center"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-primary-950/40 to-transparent"></div>
 
                     <div className="relative z-10">
-                        <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-8 border border-white/30">
-                            <span className="text-2xl font-black italic text-white">SD</span>
+                        <div className="h-12 w-12 bg-primary rounded-xl flex items-center justify-center mb-8 shadow-lg shadow-primary/20 border border-white/10">
+                            <span className="text-2xl font-black italic">DS</span>
                         </div>
-                        <h1 className="text-4xl font-black mb-4 leading-tight">Crea tu cuenta hoy mismo.</h1>
-                        <p className="text-secondary-100 text-lg leading-relaxed max-w-sm">
-                            Únete a nuestra plataforma y empieza a gestionar tus compras o ventas de manera inteligente.
+                        <h1 className="text-4xl font-black mb-4 leading-tight">Bienvenido a la tienda.</h1>
+                        <p className="text-primary-100 text-lg leading-relaxed max-w-sm font-medium">
+                            DryWall System: El centro de control definitivo para tu inventario, ventas y clientes.
                         </p>
-                    </div>
-
-                    <div className="relative z-10 pt-12">
-                        <div className="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                            <p className="text-sm italic text-secondary-50">"La mejor herramienta para llevar el control de mi negocio. El registro fue súper rápido."</p>
-                            <div className="mt-4 flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-full bg-secondary-400" />
-                                <div>
-                                    <p className="text-sm font-bold">Carlos Mendoza</p>
-                                    <p className="text-xs text-secondary-200">Cliente Verificado</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

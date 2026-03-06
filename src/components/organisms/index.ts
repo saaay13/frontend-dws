@@ -1,2 +1,9 @@
 export { default as Navbar } from './Navbar/Navbar';
 export { default as CategoryManager } from './CategoryManager/CategoryManager';
+export { default as ProductManager } from './ProductManager/ProductManager';
+export { default as LotModal } from './LotModal/LotModal';
+export { default as ProductForm } from './ProductForm/ProductForm';
+export { default as CategoryForm } from './CategoryForm/CategoryForm';
+export { default as ActivityFeed } from './ActivityFeed/ActivityFeed';
+export { default as DashboardBento } from './DashboardBento/DashboardBento';
+export { default as InventoryStats } from './InventoryStats/InventoryStats';

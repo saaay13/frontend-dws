@@ -22,9 +22,9 @@ const Navbar: React.FC = () => {
             { label: 'Dashboard', path: '/dashboard' },
             { label: 'Productos', path: '/products' },
             { label: 'Categorías', path: '/categories' },
-            { label: 'Usuarios', path: '/users' },
-            { label: 'Inventario', path: '/products' },
-            { label: 'Ventas', path: '/sales' },],
+            { label: 'Inventario', path: '/inventory' },
+            { label: 'POS (Venta)', path: '/pos' },
+        ],
         vendedor: [
             { label: 'Dashboard', path: '/dashboard' },
             { label: 'Inventario', path: '/products' },

@@ -4,7 +4,10 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
-import ProductsPage from './pages/ProductsPage';
+import AdminCategories from './pages/admin/AdminCategories';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminInventory from './pages/admin/AdminInventory';
+import POSPage from './pages/admin/POSPage';
 import ProtectedRoute from './guards/ProtectedRoute';
 import './App.css';
 
@@ -12,11 +15,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rutas sin el Layout principal (Login y Registro) */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Rutas con el Layout principal (Navbar + Footer) */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
 
@@ -33,13 +34,39 @@ function App() {
             path="/products"
             element={
               <ProtectedRoute>
-                <ProductsPage />
+                <AdminProducts />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <AdminCategories />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/inventory"
+            element={
+              <ProtectedRoute>
+                <AdminInventory />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/pos"
+            element={
+              <ProtectedRoute>
+                <POSPage />
               </ProtectedRoute>
             }
           />
         </Route>
 
-        {/* Redirección por defecto */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import Navbar from '../../organisms';
+import { Navbar } from '../../organisms';
 
 const MainLayout: React.FC = () => {
     return (

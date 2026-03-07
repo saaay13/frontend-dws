@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         ],
         vendedor: [
             { label: 'Dashboard', path: '/dashboard' },
-            { label: 'Inventario', path: '/products' },
+            { label: 'Productos', path: '/products' },
             { label: 'Ventas', path: '/sales' },
         ],
         cliente: [

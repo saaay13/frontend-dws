@@ -13,7 +13,8 @@ interface CategoryFormProps {
 const CategoryForm: React.FC<CategoryFormProps> = ({ onSave, onCancel, initialData, isSubmitting }) => {
     const [formData, setFormData] = React.useState({
         name: initialData?.name || '',
-        description: initialData?.description || ''
+        description: initialData?.description || '',
+        image_url: initialData?.image_url || ''
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -40,7 +41,18 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSave, onCancel, initialDa
                         value={formData.description}
                         onChange={(e: any) => setFormData({ ...formData, description: e.target.value })}
                         placeholder="Breve descripción de los productos en esta categoría..."
-                        className="w-full min-h-[120px] bg-background/50 backdrop-blur-sm border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 p-4 rounded-xl text-sm border font-medium resize-none"
+                        className="w-full min-h-[100px] bg-background/50 backdrop-blur-sm border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 p-4 rounded-xl text-sm border font-medium resize-none"
+                        required
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">URL de Imagen</label>
+                    <Input
+                        value={formData.image_url}
+                        onChange={(e: any) => setFormData({ ...formData, image_url: e.target.value })}
+                        placeholder="https://ejemplo.com/categoria.jpg"
+                        required
+                        className="premium-input h-12"
                     />
                 </div>
             </div>

@@ -1,7 +1,9 @@
 import React from 'react';
 import { useProducts } from '../../hooks/useProducts';
-import { Table, AdminPageHeader } from '../../components/molecules';
-import { InventoryStats } from '../../components/organisms';
+import { Tabla, CabeceraPaginaAdmin, VistaPreviaEntidad, ProgresoStock } from '../../components/molecules';
+import { Badge } from '../../components/atoms';
+import { EstadisticasInventario } from '../../components/organisms';
+import { PlantillaAdmin } from '../../components/templates';
 
 const AdminInventory: React.FC = () => {
     const { products, loading: productsLoading } = useProducts();
@@ -15,19 +17,12 @@ const AdminInventory: React.FC = () => {
             header: 'Producto',
             accessor: 'name',
             render: (p: any) => (
-                <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
-                        {p.image_url ? (
-                            <img src={p.image_url} alt={p.name} className="h-full w-full object-cover" />
-                        ) : (
-                            <span className="text-primary-300 font-bold text-xs uppercase">DS</span>
-                        )}
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-black text-foreground tracking-tight leading-tight">{p.name}</span>
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider">{p.category?.name || 'General'}</span>
-                    </div>
-                </div>
+                <VistaPreviaEntidad
+                    name={p.name}
+                    subtext={p.category?.name || 'General'}
+                    imageUrl={p.image_url}
+                    fallback="DS"
+                />
             )
         },
         {
@@ -45,19 +40,7 @@ const AdminInventory: React.FC = () => {
             accessor: 'total_stock',
             render: (p: any) => {
                 const stock = p.lots?.reduce((acc: number, lot: any) => acc + (lot.stock_disponible || 0), 0) || 0;
-                return (
-                    <div className="flex flex-col min-w-[120px]">
-                        <span className={`text-sm font-black ${stock > 20 ? 'text-success-dark' : stock > 0 ? 'text-warning-dark' : 'text-error-dark'}`}>
-                            {stock} <span className="text-[10px] opacity-70">UNIDADES</span>
-                        </span>
-                        <div className="w-full h-1.5 bg-white/5 rounded-full mt-1.5 overflow-hidden border border-white/5 shadow-inner">
-                            <div
-                                className={`h-full transition-all duration-1000 ease-out ${stock > 20 ? 'bg-success' : stock > 0 ? 'bg-warning' : 'bg-error'}`}
-                                style={{ width: `${Math.min((stock / 100) * 100, 100)}%` }}
-                            />
-                        </div>
-                    </div>
-                );
+                return <ProgresoStock current={stock} />;
             }
         },
         {
@@ -65,31 +48,17 @@ const AdminInventory: React.FC = () => {
             accessor: 'status',
             render: (p: any) => {
                 const stock = p.lots?.reduce((acc: number, lot: any) => acc + (lot.stock_disponible || 0), 0) || 0;
-                if (stock === 0) return (
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black bg-error/10 text-error border border-error/20 uppercase tracking-widest animate-pulse">
-                        Agotado
-                    </span>
-                );
-                if (stock < 10) return (
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black bg-warning/10 text-warning border border-warning/20 uppercase tracking-widest">
-                        Reabastecer
-                    </span>
-                );
-                return (
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black bg-success/10 text-success border border-success/20 uppercase tracking-widest">
-                        Óptimo
-                    </span>
-                );
+                if (stock === 0) return <Badge variant="error" className="animate-pulse">Agotado</Badge>;
+                if (stock < 10) return <Badge variant="warning">Reabastecer</Badge>;
+                return <Badge variant="success">Óptimo</Badge>;
             }
         }
     ];
 
     return (
-        <div className="min-h-screen mesh-gradient p-6 md:p-12 relative overflow-hidden">
-            <div className="blob top-0 right-0 w-[1000px] h-[1000px] opacity-20" />
-
-            <div className="max-w-7xl mx-auto space-y-16 relative z-10">
-                <AdminPageHeader
+        <PlantillaAdmin
+            cabecera={
+                <CabeceraPaginaAdmin
                     title="Master Stock"
                     category="Logística"
                     subtitle="Control centralizado de existencias, lotes y estados críticos de reabastecimiento."
@@ -100,18 +69,21 @@ const AdminInventory: React.FC = () => {
                         </div>
                     }
                 />
+            }
+            contenido={
+                <div className="space-y-16">
+                    <EstadisticasInventario skus={skus} alerts={alerts} totalUnits={totalUnits} />
 
-                <InventoryStats skus={skus} alerts={alerts} totalUnits={totalUnits} />
-
-                <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
-                    <div className="flex items-center gap-6">
-                        <h2 className="text-4xl font-black text-foreground tracking-tighter">Inventario Detallado</h2>
-                        <div className="h-[1px] flex-grow bg-white/10 rounded-full" />
+                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
+                        <div className="flex items-center gap-6">
+                            <h2 className="text-4xl font-black text-foreground tracking-tighter">Inventario Detallado</h2>
+                            <div className="h-[1px] flex-grow bg-white/10 rounded-full" />
+                        </div>
+                        <Tabla columns={columns} data={products} loading={productsLoading} />
                     </div>
-                    <Table columns={columns} data={products} loading={productsLoading} />
                 </div>
-            </div>
-        </div>
+            }
+        />
     );
 };
 

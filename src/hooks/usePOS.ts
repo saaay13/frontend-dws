@@ -49,20 +49,26 @@ export const usePOS = () => {
         return cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     };
 
-    const processSale = async (clientId: number | null = null) => {
+    const processSale = async (params: {
+        clientId: number | null,
+        sellerId: number,
+        direccion: string,
+        metodoPago: string
+    }) => {
         if (cart.length === 0) return;
         setLoading(true);
         setError(null);
         try {
             const data = {
-                client_id: clientId,
-                items: cart.map(item => ({
+                seller_id: params.sellerId,
+                client_id: params.clientId,
+                fecha: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                direccion_entrega: params.direccion,
+                metodo_pago: params.metodoPago,
+                productos: cart.map(item => ({
                     product_id: item.product_id,
-                    lot_id: item.lot_id,
-                    quantity: item.quantity,
-                    price: item.price
-                })),
-                total: calculateTotal()
+                    cantidad: item.quantity
+                }))
             };
             const result = await posService.createSale(data);
             clearCart();

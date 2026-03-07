@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useProducts } from '../../../hooks/useProducts';
-import { Table } from '../../molecules';
-import LotModal from '../LotModal/LotModal';
+import { Tabla, VistaPreviaEntidad, ProgresoStock } from '../../molecules';
+import ModalLote from '../ModalLote/ModalLote';
 
-const ProductManager: React.FC = () => {
+const GestorProducto: React.FC = () => {
     const { products, loading, deleteProduct, fetchProducts } = useProducts();
     const [showLotModal, setShowLotModal] = useState<any>(null);
 
@@ -12,19 +12,12 @@ const ProductManager: React.FC = () => {
             header: 'Info',
             accessor: 'id',
             render: (p: any) => (
-                <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
-                        {p.image_url ? (
-                            <img src={p.image_url} alt={p.name} className="h-full w-full object-cover" />
-                        ) : (
-                            <span className="text-primary-300 font-bold text-xs">DS</span>
-                        )}
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-black text-foreground tracking-tight leading-tight">{p.name}</span>
-                        <span className="text-[10px] text-primary font-bold uppercase tracking-wider">{p.category?.name || 'General'}</span>
-                    </div>
-                </div>
+                <VistaPreviaEntidad
+                    name={p.name}
+                    subtext={p.category?.name || 'General'}
+                    imageUrl={p.image_url}
+                    fallback="DS"
+                />
             )
         },
         {
@@ -41,19 +34,7 @@ const ProductManager: React.FC = () => {
             accessor: 'total_stock',
             render: (p: any) => {
                 const stock = p.lots?.reduce((acc: number, lot: any) => acc + (lot.stock_disponible || 0), 0) || 0;
-                return (
-                    <div className="flex flex-col">
-                        <span className={`text-sm font-black ${stock > 0 ? 'text-success-dark' : 'text-error-dark'}`}>
-                            {stock} <span className="text-[10px] opacity-70">UDS</span>
-                        </span>
-                        <div className="w-16 h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
-                            <div
-                                className={`h-full ${stock > 10 ? 'bg-success' : stock > 0 ? 'bg-warning' : 'bg-error'}`}
-                                style={{ width: `${Math.min(stock, 100)}%` }}
-                            />
-                        </div>
-                    </div>
-                );
+                return <ProgresoStock current={stock} />;
             }
         },
         {
@@ -80,10 +61,10 @@ const ProductManager: React.FC = () => {
 
     return (
         <div className="space-y-6">
-            <Table columns={columns} data={products} loading={loading} />
+            <Tabla columns={columns} data={products} loading={loading} />
 
             {showLotModal && (
-                <LotModal
+                <ModalLote
                     product={showLotModal}
                     onClose={() => setShowLotModal(null)}
                     onStockUpdate={fetchProducts}
@@ -93,4 +74,4 @@ const ProductManager: React.FC = () => {
     );
 };
 
-export default ProductManager;
+export default GestorProducto;

@@ -1,12 +1,12 @@
 import React from 'react';
-import { StatCard, ActionTile } from '../../molecules';
-import ActivityFeed from '../ActivityFeed/ActivityFeed';
+import { CardEstado, MosaicoAccion } from '../../molecules';
+import FlujoActividad from '../FlujoActividad/FlujoActividad';
 
-interface DashboardBentoProps {
+interface BentoDashboardProps {
     stats: any;
 }
 
-const DashboardBento: React.FC<DashboardBentoProps> = ({ stats }) => {
+const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
     const activities = stats?.recent_activity?.map((sale: any) => ({
         id: sale.id,
         title: `Orden #${sale.id}`,
@@ -19,7 +19,7 @@ const DashboardBento: React.FC<DashboardBentoProps> = ({ stats }) => {
         <div className="grid grid-cols-12 gap-6 pb-12">
             {/* Bento: High Impact Revenue */}
             <div className="col-span-12 lg:col-span-8 row-span-2">
-                <StatCard
+                <CardEstado
                     label="Ingresos Consolidados"
                     value={`$${stats?.total_sales?.toLocaleString()}`}
                     trend="↑ 12% vs ayer"
@@ -29,7 +29,7 @@ const DashboardBento: React.FC<DashboardBentoProps> = ({ stats }) => {
 
             {/* Bento: Stock Critical */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                <StatCard
+                <CardEstado
                     label="Alerta Stock"
                     value={stats?.low_stock || 0}
                     icon="⚠️"
@@ -40,7 +40,7 @@ const DashboardBento: React.FC<DashboardBentoProps> = ({ stats }) => {
 
             {/* Bento: Users Mini */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                <StatCard
+                <CardEstado
                     label="Actividad"
                     value={stats?.active_users || 0}
                     icon="👥"
@@ -51,18 +51,18 @@ const DashboardBento: React.FC<DashboardBentoProps> = ({ stats }) => {
 
             {/* Bento: Recent Transitions */}
             <div className="col-span-12 lg:col-span-7">
-                <ActivityFeed activities={activities} onViewAll={() => console.log('Ver todo')} />
+                <FlujoActividad activities={activities} onViewAll={() => console.log('Ver todo')} />
             </div>
 
             {/* Bento: Power Actions */}
             <div className="col-span-12 lg:col-span-5 grid grid-cols-2 gap-4">
-                <ActionTile title="Reportes" icon="⚡" />
-                <ActionTile title="Gestión" icon="📦" variant="highlight" />
-                <ActionTile title="Auditoría" icon="🛡️" />
-                <ActionTile title="Ajustes" icon="⚙️" />
+                <MosaicoAccion title="Reportes" icon="⚡" />
+                <MosaicoAccion title="Gestión" icon="📦" variant="highlight" />
+                <MosaicoAccion title="Auditoría" icon="🛡️" />
+                <MosaicoAccion title="Ajustes" icon="⚙️" />
             </div>
         </div>
     );
 };
 
-export default DashboardBento;
+export default BentoDashboard;

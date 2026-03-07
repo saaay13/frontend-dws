@@ -1,28 +1,28 @@
 import React from 'react';
-import { StatCard } from '../../molecules';
+import { CardEstado } from '../../molecules';
 
-interface InventoryStatsProps {
+interface EstadisticasInventarioProps {
     skus: number;
     alerts: number;
     totalUnits: number;
 }
 
-const InventoryStats: React.FC<InventoryStatsProps> = ({ skus, alerts, totalUnits }) => {
+const EstadisticasInventario: React.FC<EstadisticasInventarioProps> = ({ skus, alerts, totalUnits }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <StatCard
+            <CardEstado
                 label="Referencias (SKUs)"
                 value={skus}
                 variant="primary"
                 trend="↑ Activos"
             />
-            <StatCard
+            <CardEstado
                 label="Alertas Stock"
                 value={alerts}
                 variant="error"
                 trend="⚠ Crítico"
             />
-            <StatCard
+            <CardEstado
                 label="Stock Total"
                 value={totalUnits}
                 variant="success"
@@ -32,4 +32,4 @@ const InventoryStats: React.FC<InventoryStatsProps> = ({ skus, alerts, totalUnit
     );
 };
 
-export default InventoryStats;
+export default EstadisticasInventario;

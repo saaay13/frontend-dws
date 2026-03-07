@@ -1,7 +1,14 @@
 import apiFetch from './api';
 
 export const posService = {
-    async createSale(data: { client_id: number | null, items: any[], total: number }) {
+    async createSale(data: {
+        seller_id: number,
+        client_id: number | null,
+        fecha: string,
+        direccion_entrega: string,
+        metodo_pago: string,
+        productos: { product_id: number, cantidad: number }[]
+    }) {
         return apiFetch('/sales', {
             method: 'POST',
             body: JSON.stringify(data),

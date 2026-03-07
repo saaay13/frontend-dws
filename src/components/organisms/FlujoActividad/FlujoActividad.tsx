@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ActivityItem {
+interface ItemActividad {
     id: number;
     title: string;
     subtitle: string;
@@ -9,12 +9,12 @@ interface ActivityItem {
     date?: string;
 }
 
-interface ActivityFeedProps {
-    activities: ActivityItem[];
+interface FlujoActividadProps {
+    activities: ItemActividad[];
     onViewAll?: () => void;
 }
 
-const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities, onViewAll }) => {
+const FlujoActividad: React.FC<FlujoActividadProps> = ({ activities, onViewAll }) => {
     return (
         <div className="glass-card p-10 rounded-[3rem] border border-white/10 shadow-2xl space-y-8 h-full">
             <div className="flex items-center justify-between">
@@ -54,4 +54,4 @@ const ActivityFeed: React.FC<ActivityFeedProps> = ({ activities, onViewAll }) =>
     );
 };
 
-export default ActivityFeed;
+export default FlujoActividad;

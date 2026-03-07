@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useLots } from '../../../hooks/useLots';
-import { Table } from '../../molecules';
-import { Button, Input } from '../../atoms';
+import { Tabla } from '../../molecules';
+import { Button, Input, Badge } from '../../atoms';
 
-interface LotModalProps {
+interface ModalLoteProps {
     product: any;
     onClose: () => void;
     onStockUpdate: () => void;
 }
 
-const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) => {
+const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate }) => {
     const { lots, loading, addLot, deleteLot } = useLots(product.id);
     const [formData, setFormData] = useState({
         codigo_lote: '',
@@ -17,7 +17,8 @@ const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) 
         precio_compra: '',
         precio_venta: '',
         stock_disponible: '',
-        fecha_vencimiento: ''
+        fecha_ingreso: new Date().toISOString().split('T')[0],
+        fecha_compra: new Date().toISOString().split('T')[0]
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -30,7 +31,8 @@ const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) 
                 precio_compra: '',
                 precio_venta: '',
                 stock_disponible: '',
-                fecha_vencimiento: ''
+                fecha_ingreso: new Date().toISOString().split('T')[0],
+                fecha_compra: new Date().toISOString().split('T')[0]
             });
             onStockUpdate();
         } catch (err) {
@@ -40,7 +42,15 @@ const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) 
 
     const columns = [
         { header: 'Código', accessor: 'codigo_lote' },
-        { header: 'Stock', accessor: 'stock_disponible' },
+        {
+            header: 'Stock',
+            accessor: 'stock_disponible',
+            render: (l: any) => (
+                <Badge variant={l.stock_disponible > 10 ? 'success' : 'warning'}>
+                    {l.stock_disponible}
+                </Badge>
+            )
+        },
         { header: 'P. Venta', accessor: 'precio_venta', render: (l: any) => `$${l.precio_venta}` },
         {
             header: 'Acciones',
@@ -115,17 +125,36 @@ const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) 
                             value={formData.proveedor}
                             onChange={(e: any) => setFormData({ ...formData, proveedor: e.target.value })}
                             placeholder="Nombre Proveedor"
+                            required
                         />
                     </div>
-                    <div className="flex items-end">
-                        <Button type="submit" className="w-full">Agregar Lote</Button>
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-primary-400 uppercase">Fecha Ingreso</label>
+                        <Input
+                            type="date"
+                            value={formData.fecha_ingreso}
+                            onChange={(e: any) => setFormData({ ...formData, fecha_ingreso: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-xs font-bold text-primary-400 uppercase">Fecha Compra</label>
+                        <Input
+                            type="date"
+                            value={formData.fecha_compra}
+                            onChange={(e: any) => setFormData({ ...formData, fecha_compra: e.target.value })}
+                            required
+                        />
+                    </div>
+                    <div className="flex items-end lg:col-span-3">
+                        <Button type="submit" className="w-full h-12 font-black text-lg">Agregar Lote</Button>
                     </div>
                 </form>
 
                 <div className="space-y-4">
                     <h3 className="font-bold text-foreground">Lotes Existentes</h3>
                     <div className="max-h-60 overflow-y-auto premium-scroll">
-                        <Table columns={columns} data={lots} loading={loading} emptyMessage="No hay lotes registrados para este producto." />
+                        <Tabla columns={columns} data={lots} loading={loading} emptyMessage="No hay lotes registrados para este producto." />
                     </div>
                 </div>
             </div>
@@ -133,4 +162,4 @@ const LotModal: React.FC<LotModalProps> = ({ product, onClose, onStockUpdate }) 
     );
 };
 
-export default LotModal;
+export default ModalLote;

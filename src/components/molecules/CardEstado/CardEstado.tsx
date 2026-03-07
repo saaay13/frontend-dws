@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface StatCardProps {
+interface CardEstadoProps {
     label: string;
     value: string | number;
     icon?: string;
@@ -9,7 +9,7 @@ interface StatCardProps {
     size?: 'sm' | 'md' | 'lg';
 }
 
-const StatCard: React.FC<StatCardProps> = ({ label, value, icon, trend, variant = 'primary', size = 'md' }) => {
+const CardEstado: React.FC<CardEstadoProps> = ({ label, value, icon, trend, variant = 'primary', size = 'md' }) => {
     const variantStyles = {
         primary: 'group-hover:bg-primary/5 border-white/10 text-primary',
         error: 'group-hover:bg-error/5 border-white/10 text-error',
@@ -37,4 +37,4 @@ const StatCard: React.FC<StatCardProps> = ({ label, value, icon, trend, variant 
     );
 };
 
-export default StatCard;
+export default CardEstado;

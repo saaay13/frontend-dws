@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface AdminPageHeaderProps {
+interface CabeceraPaginaAdminProps {
     title: string;
     subtitle?: string;
     category?: string;
     action?: React.ReactNode;
 }
 
-const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({ title, subtitle, category, action }) => {
+const CabeceraPaginaAdmin: React.FC<CabeceraPaginaAdminProps> = ({ title, subtitle, category, action }) => {
     return (
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
             <div className="space-y-2">
@@ -31,4 +31,4 @@ const AdminPageHeader: React.FC<AdminPageHeaderProps> = ({ title, subtitle, cate
     );
 };
 
-export default AdminPageHeader;
+export default CabeceraPaginaAdmin;

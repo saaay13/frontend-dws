@@ -6,14 +6,14 @@ interface Column {
     render?: (item: any) => React.ReactNode;
 }
 
-interface TableProps {
+interface TablaProps {
     columns: Column[];
     data: any[];
     loading?: boolean;
     emptyMessage?: string;
 }
 
-const Table: React.FC<TableProps> = ({
+const Tabla: React.FC<TablaProps> = ({
     columns,
     data,
     loading = false,
@@ -75,4 +75,4 @@ const Table: React.FC<TableProps> = ({
     );
 };
 
-export default Table;
+export default Tabla;

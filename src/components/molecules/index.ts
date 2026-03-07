@@ -1,4 +1,6 @@
-export { default as Table } from './Table/Table';
-export { default as AdminPageHeader } from './AdminPageHeader/AdminPageHeader';
-export { default as StatCard } from './StatCard/StatCard';
-export { default as ActionTile } from './ActionTile/ActionTile';
+export { default as Tabla } from './Tabla/Tabla';
+export { default as CabeceraPaginaAdmin } from './CabeceraPaginaAdmin/CabeceraPaginaAdmin';
+export { default as CardEstado } from './CardEstado/CardEstado';
+export { default as MosaicoAccion } from './MosaicoAccion/MosaicoAccion';
+export { default as VistaPreviaEntidad } from './VistaPreviaEntidad/VistaPreviaEntidad';
+export { default as ProgresoStock } from './ProgresoStock/ProgresoStock';

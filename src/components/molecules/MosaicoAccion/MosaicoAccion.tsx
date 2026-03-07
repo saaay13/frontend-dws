@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface ActionTileProps {
+interface MosaicoAccionProps {
     title: string;
     icon: string;
     onClick?: () => void;
     variant?: 'default' | 'highlight';
 }
 
-const ActionTile: React.FC<ActionTileProps> = ({ title, icon, onClick, variant = 'default' }) => {
+const MosaicoAccion: React.FC<MosaicoAccionProps> = ({ title, icon, onClick, variant = 'default' }) => {
     return (
         <button
             onClick={onClick}
@@ -22,4 +22,4 @@ const ActionTile: React.FC<ActionTileProps> = ({ title, icon, onClick, variant =
     );
 };
 
-export default ActionTile;
+export default MosaicoAccion;

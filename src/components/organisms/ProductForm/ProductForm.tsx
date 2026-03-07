@@ -57,6 +57,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSave, onCancel, initialData
                         onChange={(e: any) => setFormData({ ...formData, description: e.target.value })}
                         placeholder="Detalles sobre el producto, medidas, etc."
                         className="w-full min-h-[120px] bg-background/50 backdrop-blur-sm border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 p-4 rounded-xl text-sm border font-medium resize-none"
+                        required
                     />
                 </div>
                 <div className="md:col-span-2 space-y-2">
@@ -65,6 +66,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSave, onCancel, initialData
                         value={formData.image_url}
                         onChange={(e: any) => setFormData({ ...formData, image_url: e.target.value })}
                         placeholder="https://ejemplo.com/imagen.jpg"
+                        required
                         className="premium-input h-12"
                     />
                 </div>

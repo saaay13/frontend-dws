@@ -23,7 +23,8 @@ export const useLots = (productId?: number | string) => {
     const addLot = async (lotData: any) => {
         setLoading(true);
         try {
-            const newLot = await lotService.createLot({ ...lotData, product_id: productId });
+            const response = await lotService.createLot({ ...lotData, product_id: productId });
+            const newLot = response.lot;
             setLots([...lots, newLot]);
             return newLot;
         } catch (err: any) {

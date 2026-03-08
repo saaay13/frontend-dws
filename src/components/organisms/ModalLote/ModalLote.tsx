@@ -7,35 +7,45 @@ interface ModalLoteProps {
     product: any;
     onClose: () => void;
     onStockUpdate: () => void;
+    lotToEdit?: any;
 }
 
-const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate }) => {
-    const { lots, loading, addLot, deleteLot } = useLots(product.id);
+const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, lotToEdit }) => {
+    const { lots, loading, addLot, updateLot, deleteLot } = useLots(product.id);
     const [formData, setFormData] = useState({
-        codigo_lote: '',
-        proveedor: '',
-        precio_compra: '',
-        precio_venta: '',
-        stock_disponible: '',
-        fecha_ingreso: new Date().toISOString().split('T')[0],
-        fecha_compra: new Date().toISOString().split('T')[0]
+        codigo_lote: lotToEdit?.codigo_lote || '',
+        proveedor: lotToEdit?.proveedor || '',
+        precio_compra: lotToEdit?.precio_compra || '',
+        precio_venta: lotToEdit?.precio_venta || '',
+        stock_disponible: lotToEdit?.stock_disponible || '',
+        fecha_ingreso: lotToEdit?.fecha_ingreso || new Date().toISOString().split('T')[0],
+        fecha_compra: lotToEdit?.fecha_compra || new Date().toISOString().split('T')[0]
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await addLot(formData);
-            setFormData({
-                codigo_lote: '',
-                proveedor: '',
-                precio_compra: '',
-                precio_venta: '',
-                stock_disponible: '',
-                fecha_ingreso: new Date().toISOString().split('T')[0],
-                fecha_compra: new Date().toISOString().split('T')[0]
-            });
-            onStockUpdate();
-        } catch (err) {
+            if (lotToEdit) {
+                await updateLot(lotToEdit.id, { ...formData, product_id: product.id });
+            } else {
+                await addLot(formData);
+            }
+            
+            if (!lotToEdit) {
+                setFormData({
+                    codigo_lote: '',
+                    proveedor: '',
+                    precio_compra: '',
+                    precio_venta: '',
+                    stock_disponible: '',
+                    fecha_ingreso: new Date().toISOString().split('T')[0],
+                    fecha_compra: new Date().toISOString().split('T')[0]
+                });
+            }
+            await onStockUpdate();
+            if (lotToEdit) onClose();
+        } catch (err: any) {
+            alert(err.message || 'Error al guardar el lote');
             console.error(err);
         }
     };
@@ -71,7 +81,9 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate }
             <div className="glass-card w-full max-w-4xl p-8 rounded-3xl border border-border shadow-2xl space-y-6">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="text-2xl font-bold text-primary-300">Gestionar Lotes</h2>
+                        <h2 className="text-2xl font-bold text-primary-300">
+                            {lotToEdit ? 'Editar Lote' : 'Gestionar Lotes'}
+                        </h2>
                         <p className="text-muted-foreground">Producto: <span className="text-foreground font-semibold">{product.name}</span></p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors text-muted-foreground">
@@ -147,7 +159,9 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate }
                         />
                     </div>
                     <div className="flex items-end lg:col-span-3">
-                        <Button type="submit" className="w-full h-12 font-black text-lg">Agregar Lote</Button>
+                        <Button type="submit" className="w-full h-12 font-black text-lg">
+                            {lotToEdit ? 'Actualizar Lote' : 'Agregar Lote'}
+                        </Button>
                     </div>
                 </form>
 

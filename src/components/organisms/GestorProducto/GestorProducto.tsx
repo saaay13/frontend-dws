@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
-import { useProducts } from '../../../hooks/useProducts';
 import { Tabla, VistaPreviaEntidad, ProgresoStock } from '../../molecules';
 import ModalLote from '../ModalLote/ModalLote';
 
-const GestorProducto: React.FC = () => {
-    const { products, loading, deleteProduct, fetchProducts } = useProducts();
+interface GestorProductoProps {
+    products: any[];
+    loading: boolean;
+    onEditProduct: (product: any) => void;
+    onDeleteProduct: (id: number | string) => void;
+    onRefresh: () => void;
+}
+
+const GestorProducto: React.FC<GestorProductoProps> = ({ 
+    products, 
+    loading, 
+    onEditProduct, 
+    onDeleteProduct,
+    onRefresh 
+}) => {
     const [showLotModal, setShowLotModal] = useState<any>(null);
 
     const columns = [
@@ -49,7 +61,13 @@ const GestorProducto: React.FC = () => {
                         Lotes
                     </button>
                     <button
-                        onClick={() => deleteProduct(p.id)}
+                        onClick={() => onEditProduct(p)}
+                        className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
+                    >
+                        ✎
+                    </button>
+                    <button
+                        onClick={() => onDeleteProduct(p.id)}
                         className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"
                     >
                         ✕
@@ -67,7 +85,7 @@ const GestorProducto: React.FC = () => {
                 <ModalLote
                     product={showLotModal}
                     onClose={() => setShowLotModal(null)}
-                    onStockUpdate={fetchProducts}
+                    onStockUpdate={onRefresh}
                 />
             )}
         </div>

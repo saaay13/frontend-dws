@@ -36,8 +36,9 @@ export const useProducts = () => {
     const updateProduct = async (id: number | string, productData: any) => {
         setLoading(true);
         try {
-            const updatedProduct = await productService.updateProduct(id, productData);
-            setProducts(products.map(p => p.id === id ? updatedProduct : p));
+            const response = await productService.updateProduct(id, productData);
+            const updatedProduct = response.product;
+            setProducts(products.map(p => p.id == id ? updatedProduct : p));
             return updatedProduct;
         } catch (err: any) {
             setError(err.message || 'Error al actualizar producto');
@@ -51,7 +52,7 @@ export const useProducts = () => {
         setLoading(true);
         try {
             await productService.deleteProduct(id);
-            setProducts(products.filter(p => p.id !== id));
+            setProducts(products.filter(p => p.id != id));
         } catch (err: any) {
             setError(err.message || 'Error al eliminar producto');
             throw err;

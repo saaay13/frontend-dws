@@ -8,6 +8,8 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminInventory from './pages/admin/AdminInventory';
 import POSPage from './pages/admin/POSPage';
+import AdminLots from './pages/admin/AdminLots';
+import AdminSales from './pages/admin/AdminSales';
 import ProtectedRoute from './guards/ProtectedRoute';
 import './App.css';
 
@@ -53,6 +55,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminInventory />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/lots"
+            element={
+              <ProtectedRoute>
+                <AdminLots />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/sales"
+            element={
+              <ProtectedRoute>
+                <AdminSales />
               </ProtectedRoute>
             }
           />

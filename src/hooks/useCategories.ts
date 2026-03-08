@@ -22,7 +22,8 @@ export const useCategories = () => {
     const addCategory = async (categoryData: any) => {
         setLoading(true);
         try {
-            const newCategory = await categoryService.createCategory(categoryData);
+            const response = await categoryService.createCategory(categoryData);
+            const newCategory = response.category;
             setCategories([...categories, newCategory]);
             return newCategory;
         } catch (err: any) {
@@ -36,8 +37,9 @@ export const useCategories = () => {
     const updateCategory = async (id: number | string, categoryData: any) => {
         setLoading(true);
         try {
-            const updatedCategory = await categoryService.updateCategory(id, categoryData);
-            setCategories(categories.map(cat => cat.id === id ? updatedCategory : cat));
+            const response = await categoryService.updateCategory(id, categoryData);
+            const updatedCategory = response.category;
+            setCategories(categories.map(cat => cat.id == id ? updatedCategory : cat));
             return updatedCategory;
         } catch (err: any) {
             setError(err.message || 'Error al actualizar categoría');
@@ -51,7 +53,7 @@ export const useCategories = () => {
         setLoading(true);
         try {
             await categoryService.deleteCategory(id);
-            setCategories(categories.filter(cat => cat.id !== id));
+            setCategories(categories.filter(cat => cat.id != id));
         } catch (err: any) {
             setError(err.message || 'Error al eliminar categoría');
             throw err;

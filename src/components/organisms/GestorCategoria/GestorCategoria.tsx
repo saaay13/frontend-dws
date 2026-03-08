@@ -6,12 +6,14 @@ interface CategoryManagerProps {
     categories?: any[];
     loading?: boolean;
     onDelete?: (id: number | string) => Promise<void>;
+    onEdit?: (category: any) => void;
 }
 
 const GestorCategoria: React.FC<CategoryManagerProps> = ({
     categories: propCategories,
     loading: propLoading,
-    onDelete
+    onDelete,
+    onEdit
 }) => {
     const { categories: hookCategories, loading: hookLoading, deleteCategory: hookDelete } = useCategories();
 
@@ -54,6 +56,14 @@ const GestorCategoria: React.FC<CategoryManagerProps> = ({
             accessor: 'actions',
             render: (c: any) => (
                 <div className="flex items-center gap-2">
+                    {onEdit && (
+                        <button
+                            onClick={() => onEdit(c)}
+                            className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
+                        >
+                            ✎
+                        </button>
+                    )}
                     <button
                         onClick={() => deleteCategory(c.id)}
                         className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"

@@ -66,7 +66,7 @@ const POSPage: React.FC = () => {
             }
             contenido={
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    {/* Catálogo de Productos */}
+                    {/* Catalogo de Productos */}
                     <div className="flex-grow grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom duration-700">
                         {filteredProducts.map(product => {
                             const stock = product.lots?.reduce((acc: number, l: any) => acc + (l.stock_disponible || 0), 0) || 0;
@@ -76,7 +76,7 @@ const POSPage: React.FC = () => {
                                     onClick={() => stock > 0 && addToCart(product)}
                                     className={`glass-card p-6 rounded-[2.5rem] border border-white/10 cursor-pointer transition-all duration-500 relative overflow-hidden group ${stock === 0 ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-[1.05] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10'}`}
                                 >
-                                    {/* Decoración */}
+                                    {/* Decoracion */}
                                     <div className="absolute -top-10 -right-10 h-32 w-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700" />
 
                                     <div className="relative z-10 space-y-5">
@@ -145,7 +145,7 @@ const POSPage: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* Configuración de Venta */}
+                            {/* Configuracion de Venta */}
                             <div className="space-y-3 pt-4 border-t border-white/10">
                                 {user?.rol === 'administrador' && (
                                     <SelectorVendedor
@@ -175,17 +175,17 @@ const POSPage: React.FC = () => {
                                         <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Entrega</label>
                                         <select
                                             value={direccion === 'Tienda Central' ? 'Tienda' : 'Envio'}
-                                            onChange={(e: any) => setDireccion(e.target.value === 'Tienda' ? 'Tienda Central' : '')}
+                                            onChange={(e: any) => setDireccion(e.target.value === 'Tienda' ? 'Tienda Central' : 'Dirección de Envío')}
                                             className="h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-bold outline-none"
                                         >
                                             <option value="Tienda" className="bg-slate-900">Tienda</option>
-                                            <option value="Envio" className="bg-slate-900">Envío</option>
+                                            <option value="Envio" className="bg-slate-900">Envío (Domicilio)</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Totales y Acción */}
+                            {/* Totales y Accion */}
                             <div className="space-y-3 pt-4 border-t border-white/10">
                                 {error && (
                                     <p className="text-[9px] font-bold text-error bg-error/10 p-2 rounded-lg leading-tight uppercase">

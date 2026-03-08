@@ -7,11 +7,12 @@ export const useLots = (productId?: number | string) => {
     const [error, setError] = useState<string | null>(null);
 
     const fetchLots = async () => {
-        if (!productId) return;
         setLoading(true);
         setError(null);
         try {
-            const data = await lotService.getLotsByProduct(productId);
+            const data = productId 
+                ? await lotService.getLotsByProduct(productId)
+                : await lotService.getAllLots();
             setLots(data);
         } catch (err: any) {
             setError(err.message || 'Error al cargar lotes');
@@ -38,8 +39,9 @@ export const useLots = (productId?: number | string) => {
     const updateLot = async (id: number | string, lotData: any) => {
         setLoading(true);
         try {
-            const updatedLot = await lotService.updateLot(id, lotData);
-            setLots(lots.map(l => l.id === id ? updatedLot : l));
+            const response = await lotService.updateLot(id, lotData);
+            const updatedLot = response.lot;
+            setLots(lots.map(l => l.id == id ? updatedLot : l));
             return updatedLot;
         } catch (err: any) {
             setError(err.message || 'Error al actualizar lote');
@@ -53,7 +55,7 @@ export const useLots = (productId?: number | string) => {
         setLoading(true);
         try {
             await lotService.deleteLot(id);
-            setLots(lots.filter(l => l.id !== id));
+            setLots(lots.filter(l => l.id != id));
         } catch (err: any) {
             setError(err.message || 'Error al eliminar lote');
             throw err;
@@ -63,9 +65,7 @@ export const useLots = (productId?: number | string) => {
     };
 
     useEffect(() => {
-        if (productId) {
-            fetchLots();
-        }
+        fetchLots();
     }, [productId]);
 
     return {

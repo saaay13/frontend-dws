@@ -1,9 +1,9 @@
 export { default as Navbar } from './Navbar/Navbar';
 export { default as FlujoActividad } from './FlujoActividad/FlujoActividad';
-export { default as FormularioCategoria } from './CategoryForm/CategoryForm';
+export { default as CategoryForm } from './CategoryForm/CategoryForm';
 export { default as GestorCategoria } from './GestorCategoria/GestorCategoria';
 export { default as BentoDashboard } from './BentoDashboard/BentoDashboard';
 export { default as EstadisticasInventario } from './EstadisticasInventario/EstadisticasInventario';
 export { default as ModalLote } from './ModalLote/ModalLote';
-export { default as FormularioProducto } from './ProductForm/ProductForm';
+export { default as ProductForm } from './ProductForm/ProductForm';
 export { default as GestorProducto } from './GestorProducto/GestorProducto';

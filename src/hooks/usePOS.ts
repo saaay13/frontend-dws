@@ -75,6 +75,7 @@ export const usePOS = () => {
             return result;
         } catch (err: any) {
             setError(err.message || 'Error al procesar la venta');
+            console.error('API Error:', err);
             throw err;
         } finally {
             setLoading(false);

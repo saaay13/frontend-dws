@@ -22,7 +22,8 @@ export const useClients = () => {
     const addClient = async (clientData: any) => {
         setLoading(true);
         try {
-            const newClient = await clientService.createClient(clientData);
+            const response = await clientService.createClient(clientData);
+            const newClient = response.client;
             setClients([...clients, newClient]);
             return newClient;
         } catch (err: any) {

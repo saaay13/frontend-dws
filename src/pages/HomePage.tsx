@@ -1,9 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/atoms';
 
 const HomePage: React.FC = () => {
+    const { user } = useAuth();
     const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if (user) {
+            navigate('/dashboard');
+        }
+    }, [user, navigate]);
 
     return (
         <>

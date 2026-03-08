@@ -7,3 +7,4 @@ export { default as EstadisticasInventario } from './EstadisticasInventario/Esta
 export { default as ModalLote } from './ModalLote/ModalLote';
 export { default as ProductForm } from './ProductForm/ProductForm';
 export { default as GestorProducto } from './GestorProducto/GestorProducto';
+export { default as CartDrawer } from './CartDrawer/CartDrawer';

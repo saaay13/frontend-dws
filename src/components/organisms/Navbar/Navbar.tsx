@@ -2,11 +2,13 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../atoms';
 import { useAuth } from '../../../context/AuthContext';
+import { useCart } from '../../../context/CartContext';
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { user, logout } = useAuth();
+    const { itemCount, setIsCartOpen } = useCart();
 
     const handleLogout = async () => {
         try {
@@ -36,8 +38,8 @@ const Navbar: React.FC = () => {
         ],
         cliente: [
             { label: 'Inicio', path: '/' },
-            { label: 'Productos', path: '/products' },
-            { label: 'Mis Compras', path: '/my-purchases' },
+            { label: 'Tienda', path: '/store' },
+            { label: 'Mis Compras', path: '/dashboard' },
         ],
 
     };
@@ -116,6 +118,22 @@ const Navbar: React.FC = () => {
                                 Salir
                             </Button>
                         </div>
+                    )}
+                    
+                    {user?.rol === 'cliente' && (
+                        <Button 
+                            variant="primary" 
+                            size="sm" 
+                            onClick={() => setIsCartOpen(true)}
+                            className="relative rounded-xl h-10 w-10 p-0 flex items-center justify-center shadow-lg shadow-primary/30"
+                        >
+                            <span className="text-xl">🛒</span>
+                            {itemCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-white text-primary text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center border-2 border-primary animate-in zoom-in duration-300">
+                                    {itemCount}
+                                </span>
+                            )}
+                        </Button>
                     )}
                 </div>
             </div>

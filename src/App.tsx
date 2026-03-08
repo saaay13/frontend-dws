@@ -3,15 +3,36 @@ import { MainLayout } from './components/templates';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminInventory from './pages/admin/AdminInventory';
 import POSPage from './pages/admin/POSPage';
 import AdminLots from './pages/admin/AdminLots';
 import AdminSales from './pages/admin/AdminSales';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import VendedorDashboard from './pages/vendedor/VendedorDashboard';
+import ClienteDashboard from './pages/cliente/ClienteDashboard';
+import StorePage from './pages/cliente/StorePage';
 import ProtectedRoute from './guards/ProtectedRoute';
+import { useAuth } from './context/AuthContext';
 import './App.css';
+
+const DashboardRedirect = () => {
+  const { user } = useAuth();
+  
+  if (!user) return <Navigate to="/login" replace />;
+  
+  switch (user.rol) {
+    case 'administrador':
+      return <AdminDashboard />;
+    case 'vendedor':
+      return <VendedorDashboard />;
+    case 'cliente':
+      return <ClienteDashboard />;
+    default:
+      return <Navigate to="/" replace />;
+  }
+};
 
 function App() {
   return (
@@ -22,15 +43,16 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
-
-          <Route
-            path="/dashboard"
+          
+          <Route 
+            path="/dashboard" 
             element={
-              <ProtectedRoute>
-                <DashboardPage />
+              <ProtectedRoute allowedRoles={['administrador', 'vendedor', 'cliente']}>
+                <DashboardRedirect />
               </ProtectedRoute>
-            }
+            } 
           />
+
 
           <Route
             path="/products"
@@ -78,10 +100,10 @@ function App() {
           />
 
           <Route
-            path="/pos"
+            path="/store"
             element={
-              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
-                <POSPage />
+              <ProtectedRoute allowedRoles={['cliente']}>
+                <StorePage />
               </ProtectedRoute>
             }
           />

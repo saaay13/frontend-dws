@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Navbar } from '../../organisms';
+import { Navbar, CartDrawer } from '../../organisms';
 
 const MainLayout: React.FC = () => {
     return (
@@ -13,6 +13,7 @@ const MainLayout: React.FC = () => {
                     <p>© 2026 DryWall System</p>
                 </div>
             </footer>
+            <CartDrawer />
         </div>
     );
 };

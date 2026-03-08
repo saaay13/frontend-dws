@@ -39,7 +39,7 @@ const StorePage: React.FC = () => {
             }
             contenido={
                 <div className="space-y-8">
-                    {/* Categorías */}
+                    {/* Categorias */}
                     <div className="flex flex-wrap gap-2 overflow-x-auto pb-2 scrollbar-hide">
                         <Button
                             variant={selectedCategory === null ? 'primary' : 'outline'}

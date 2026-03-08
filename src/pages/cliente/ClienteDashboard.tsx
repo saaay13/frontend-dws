@@ -29,7 +29,7 @@ const ClienteDashboard: React.FC = () => {
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Orders History */}
+                {/* Historial */}
                 <div className="glass-card p-8 border-white/40">
                     <h2 className="text-xl font-black mb-6 flex items-center gap-2">
                         <span>📦</span> Mis Últimas Compras
@@ -67,7 +67,7 @@ const ClienteDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Profile Card */}
+                {/* Perfil */}
                 <div className="relative p-8 bg-gradient-to-br from-primary-600 to-primary-800 text-white rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 flex flex-col justify-between">
                     <div className="absolute top-0 right-0 h-full w-1/2 bg-primary/20 blur-3xl rounded-full translate-x-1/2 -z-0"></div>
                     

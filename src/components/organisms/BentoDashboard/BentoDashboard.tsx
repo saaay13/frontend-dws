@@ -37,7 +37,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 />
             </div>
 
-            {/* Bento: Stock Critical */}
+            {/* Stock critico */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
                 <CardEstado
                     label="Alerta Stock"
@@ -48,7 +48,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 />
             </div>
 
-            {/* Bento: Users/Clients */}
+            {/* Clientes */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
                 <CardEstado
                     label="Base de Clientes"
@@ -59,7 +59,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 />
             </div>
 
-            {/* Bento: Active Sellers */}
+            {/* Vendedores */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
                 <CardEstado
                     label="Equipo de Ventas"
@@ -70,7 +70,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 />
             </div>
 
-            {/* Bento: Recent Transitions */}
+            {/* Actividad */}
             <div className="col-span-12 lg:col-span-7">
                 <div className="bg-white p-6 rounded-[2rem] border border-neutral-100 shadow-sm h-full flex flex-col">
                     <h3 className="text-lg font-black mb-6 flex items-center gap-2">
@@ -81,7 +81,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 </div>
             </div>
 
-            {/* Bento: Banner */}
+            {/* Banner */}
             <div className="col-span-12 lg:col-span-5">
                 <div className="h-full w-full rounded-[2rem] overflow-hidden border border-neutral-100 shadow-sm group">
                     <img

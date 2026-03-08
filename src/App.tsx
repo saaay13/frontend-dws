@@ -6,7 +6,6 @@ import RegisterPage from './pages/RegisterPage';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminInventory from './pages/admin/AdminInventory';
-import POSPage from './pages/admin/POSPage';
 import AdminLots from './pages/admin/AdminLots';
 import AdminSales from './pages/admin/AdminSales';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -19,9 +18,9 @@ import './App.css';
 
 const DashboardRedirect = () => {
   const { user } = useAuth();
-  
+
   if (!user) return <Navigate to="/login" replace />;
-  
+
   switch (user.rol) {
     case 'administrador':
       return <AdminDashboard />;
@@ -43,14 +42,14 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
-          
-          <Route 
-            path="/dashboard" 
+
+          <Route
+            path="/dashboard"
             element={
               <ProtectedRoute allowedRoles={['administrador', 'vendedor', 'cliente']}>
                 <DashboardRedirect />
               </ProtectedRoute>
-            } 
+            }
           />
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardEstado, MosaicoAccion } from '../../molecules';
+import { CardEstado } from '../../molecules';
 import FlujoActividad from '../FlujoActividad/FlujoActividad';
 
 interface BentoDashboardProps {
@@ -17,13 +17,23 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
 
     return (
         <div className="grid grid-cols-12 gap-6 pb-12">
-            {/* Bento: High Impact Revenue */}
-            <div className="col-span-12 lg:col-span-8 row-span-2">
+            <div className="col-span-12 lg:col-span-8">
                 <CardEstado
-                    label="Ingresos Consolidados"
-                    value={`$${stats?.total_sales?.toLocaleString()}`}
-                    trend="↑ 12% vs ayer"
+                    label="Ingresos de Hoy"
+                    value={`$${stats?.revenue_today?.toLocaleString() || '0.00'}`}
+                    trend={`Total acumulado: $${stats?.total_sales?.toLocaleString() || '0'}`}
                     size="lg"
+                    variant="primary"
+                />
+            </div>
+
+            <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                <CardEstado
+                    label="Ventas Hoy"
+                    value={stats?.sales_today || 0}
+                    icon="🛒"
+                    variant="success"
+                    trend="Órdenes procesadas"
                 />
             </div>
 
@@ -38,28 +48,48 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                 />
             </div>
 
-            {/* Bento: Users Mini */}
+            {/* Bento: Users/Clients */}
             <div className="col-span-12 md:col-span-6 lg:col-span-4">
                 <CardEstado
-                    label="Actividad"
-                    value={stats?.active_users || 0}
+                    label="Base de Clientes"
+                    value={stats?.total_clients || 0}
                     icon="👥"
                     variant="primary"
-                    trend="Usuarios hoy"
+                    trend="Clientes registrados"
+                />
+            </div>
+
+            {/* Bento: Active Sellers */}
+            <div className="col-span-12 md:col-span-6 lg:col-span-4">
+                <CardEstado
+                    label="Equipo de Ventas"
+                    value={stats?.total_sellers || 0}
+                    icon="👔"
+                    variant="primary"
+                    trend="Vendedores activos"
                 />
             </div>
 
             {/* Bento: Recent Transitions */}
             <div className="col-span-12 lg:col-span-7">
-                <FlujoActividad activities={activities} onViewAll={() => console.log('Ver todo')} />
+                <div className="bg-white p-6 rounded-[2rem] border border-neutral-100 shadow-sm h-full flex flex-col">
+                    <h3 className="text-lg font-black mb-6 flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                        Ventas en Tiempo Real
+                    </h3>
+                    <FlujoActividad activities={activities} onViewAll={() => console.log('Ver todo')} />
+                </div>
             </div>
 
-            {/* Bento: Power Actions */}
-            <div className="col-span-12 lg:col-span-5 grid grid-cols-2 gap-4">
-                <MosaicoAccion title="Reportes" icon="⚡" />
-                <MosaicoAccion title="Gestión" icon="📦" variant="highlight" />
-                <MosaicoAccion title="Auditoría" icon="🛡️" />
-                <MosaicoAccion title="Ajustes" icon="⚙️" />
+            {/* Bento: Banner */}
+            <div className="col-span-12 lg:col-span-5">
+                <div className="h-full w-full rounded-[2rem] overflow-hidden border border-neutral-100 shadow-sm group">
+                    <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu34StWQz-dRL7tXgNtWgPvpcYhQdetbDynA&s"
+                        alt="Estrategia DWS"
+                        className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    />
+                </div>
             </div>
         </div>
     );

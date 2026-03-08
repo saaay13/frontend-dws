@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLots } from '../../../hooks/useLots';
+import { useAuth } from '../../../context/AuthContext';
 import { Tabla } from '../../molecules';
 import { Button, Input, Badge } from '../../atoms';
 
@@ -11,6 +12,7 @@ interface ModalLoteProps {
 }
 
 const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, lotToEdit }) => {
+    const { user } = useAuth();
     const { lots, loading, addLot, updateLot, deleteLot } = useLots(product.id);
     const [formData, setFormData] = useState({
         codigo_lote: lotToEdit?.codigo_lote || '',
@@ -22,8 +24,11 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, 
         fecha_compra: lotToEdit?.fecha_compra || new Date().toISOString().split('T')[0]
     });
 
+    const isReadOnly = user?.rol === 'vendedor';
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isReadOnly) return;
         try {
             if (lotToEdit) {
                 await updateLot(lotToEdit.id, { ...formData, product_id: product.id });
@@ -63,15 +68,17 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, 
         },
         { header: 'P. Venta', accessor: 'precio_venta', render: (l: any) => `$${l.precio_venta}` },
         {
-            header: 'Acciones',
+            header: isReadOnly ? '' : 'Acciones',
             accessor: 'actions',
             render: (lot: any) => (
-                <button
-                    onClick={() => { deleteLot(lot.id); onStockUpdate(); }}
-                    className="text-error-dark hover:underline text-xs"
-                >
-                    Eliminar
-                </button>
+                !isReadOnly && (
+                    <button
+                        onClick={() => { deleteLot(lot.id); onStockUpdate(); }}
+                        className="text-error-dark hover:underline text-xs"
+                    >
+                        Eliminar
+                    </button>
+                )
             )
         }
     ];
@@ -82,7 +89,7 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, 
                 <div className="flex justify-between items-center">
                     <div>
                         <h2 className="text-2xl font-bold text-primary-300">
-                            {lotToEdit ? 'Editar Lote' : 'Gestionar Lotes'}
+                            {isReadOnly ? 'Consulta de Lotes' : lotToEdit ? 'Editar Lote' : 'Gestionar Lotes'}
                         </h2>
                         <p className="text-muted-foreground">Producto: <span className="text-foreground font-semibold">{product.name}</span></p>
                     </div>
@@ -91,79 +98,81 @@ const ModalLote: React.FC<ModalLoteProps> = ({ product, onClose, onStockUpdate, 
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-primary/5 p-6 rounded-2xl border border-primary/10">
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Código Lote</label>
-                        <Input
-                            value={formData.codigo_lote}
-                            onChange={(e: any) => setFormData({ ...formData, codigo_lote: e.target.value })}
-                            placeholder="LOT-001"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Stock Inicial</label>
-                        <Input
-                            type="number"
-                            value={formData.stock_disponible}
-                            onChange={(e: any) => setFormData({ ...formData, stock_disponible: e.target.value })}
-                            placeholder="100"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Precio Compra</label>
-                        <Input
-                            type="number"
-                            value={formData.precio_compra}
-                            onChange={(e: any) => setFormData({ ...formData, precio_compra: e.target.value })}
-                            placeholder="10.00"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Precio Venta</label>
-                        <Input
-                            type="number"
-                            value={formData.precio_venta}
-                            onChange={(e: any) => setFormData({ ...formData, precio_venta: e.target.value })}
-                            placeholder="15.00"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Proveedor</label>
-                        <Input
-                            value={formData.proveedor}
-                            onChange={(e: any) => setFormData({ ...formData, proveedor: e.target.value })}
-                            placeholder="Nombre Proveedor"
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Fecha Ingreso</label>
-                        <Input
-                            type="date"
-                            value={formData.fecha_ingreso}
-                            onChange={(e: any) => setFormData({ ...formData, fecha_ingreso: e.target.value })}
-                            required
-                        />
-                    </div>
-                    <div className="space-y-1">
-                        <label className="text-xs font-bold text-primary-400 uppercase">Fecha Compra</label>
-                        <Input
-                            type="date"
-                            value={formData.fecha_compra}
-                            onChange={(e: any) => setFormData({ ...formData, fecha_compra: e.target.value })}
-                            required
-                        />
-                    </div>
-                    <div className="flex items-end lg:col-span-3">
-                        <Button type="submit" className="w-full h-12 font-black text-lg">
-                            {lotToEdit ? 'Actualizar Lote' : 'Agregar Lote'}
-                        </Button>
-                    </div>
-                </form>
+                {!isReadOnly && (
+                    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-primary/5 p-6 rounded-2xl border border-primary/10">
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Código Lote</label>
+                            <Input
+                                value={formData.codigo_lote}
+                                onChange={(e: any) => setFormData({ ...formData, codigo_lote: e.target.value })}
+                                placeholder="LOT-001"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Stock Inicial</label>
+                            <Input
+                                type="number"
+                                value={formData.stock_disponible}
+                                onChange={(e: any) => setFormData({ ...formData, stock_disponible: e.target.value })}
+                                placeholder="100"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Precio Compra</label>
+                            <Input
+                                type="number"
+                                value={formData.precio_compra}
+                                onChange={(e: any) => setFormData({ ...formData, precio_compra: e.target.value })}
+                                placeholder="10.00"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Precio Venta</label>
+                            <Input
+                                type="number"
+                                value={formData.precio_venta}
+                                onChange={(e: any) => setFormData({ ...formData, precio_venta: e.target.value })}
+                                placeholder="15.00"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Proveedor</label>
+                            <Input
+                                value={formData.proveedor}
+                                onChange={(e: any) => setFormData({ ...formData, proveedor: e.target.value })}
+                                placeholder="Nombre Proveedor"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Fecha Ingreso</label>
+                            <Input
+                                type="date"
+                                value={formData.fecha_ingreso}
+                                onChange={(e: any) => setFormData({ ...formData, fecha_ingreso: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-primary-400 uppercase">Fecha Compra</label>
+                            <Input
+                                type="date"
+                                value={formData.fecha_compra}
+                                onChange={(e: any) => setFormData({ ...formData, fecha_compra: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="flex items-end lg:col-span-3">
+                            <Button type="submit" className="w-full h-12 font-black text-lg">
+                                {lotToEdit ? 'Actualizar Lote' : 'Agregar Lote'}
+                            </Button>
+                        </div>
+                    </form>
+                )}
 
                 <div className="space-y-4">
                     <h3 className="font-bold text-foreground">Lotes Existentes</h3>

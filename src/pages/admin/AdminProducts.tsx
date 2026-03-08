@@ -3,9 +3,11 @@ import { GestorProducto, ProductForm } from '../../components/organisms';
 import { Button } from '../../components/atoms';
 import { CabeceraPaginaAdmin } from '../../components/molecules';
 import { useProducts } from '../../hooks/useProducts';
+import { useAuth } from '../../context/AuthContext';
 import { PlantillaAdmin } from '../../components/templates';
 
 const AdminProducts: React.FC = () => {
+    const { user } = useAuth();
     const [showForm, setShowForm] = useState(false);
     const { products, loading, addProduct, updateProduct, deleteProduct, fetchProducts } = useProducts();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,12 +48,14 @@ const AdminProducts: React.FC = () => {
                     category="Administración"
                     subtitle="Gestiona tu inventario con precisión profesional y control total sobre cada lote."
                     action={
-                        <Button
-                            onClick={() => setShowForm(true)}
-                            className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform"
-                        >
-                            <span className="mr-2">+</span> Crear Producto
-                        </Button>
+                        user?.rol === 'administrador' && (
+                            <Button
+                                onClick={() => setShowForm(true)}
+                                className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform"
+                            >
+                                <span className="mr-2">+</span> Crear Producto
+                            </Button>
+                        )
                     }
                 />
             }

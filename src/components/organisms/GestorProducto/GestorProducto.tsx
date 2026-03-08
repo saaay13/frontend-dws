@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Tabla, VistaPreviaEntidad, ProgresoStock } from '../../molecules';
+import { useAuth } from '../../../context/AuthContext';
 import ModalLote from '../ModalLote/ModalLote';
 
 interface GestorProductoProps {
@@ -17,6 +18,7 @@ const GestorProducto: React.FC<GestorProductoProps> = ({
     onDeleteProduct,
     onRefresh 
 }) => {
+    const { user } = useAuth();
     const [showLotModal, setShowLotModal] = useState<any>(null);
 
     const columns = [
@@ -60,18 +62,22 @@ const GestorProducto: React.FC<GestorProductoProps> = ({
                     >
                         Lotes
                     </button>
-                    <button
-                        onClick={() => onEditProduct(p)}
-                        className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
-                    >
-                        ✎
-                    </button>
-                    <button
-                        onClick={() => onDeleteProduct(p.id)}
-                        className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"
-                    >
-                        ✕
-                    </button>
+                    {user?.rol === 'administrador' && (
+                        <>
+                            <button
+                                onClick={() => onEditProduct(p)}
+                                className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
+                            >
+                                ✎
+                            </button>
+                            <button
+                                onClick={() => onDeleteProduct(p.id)}
+                                className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"
+                            >
+                                ✕
+                            </button>
+                        </>
+                    )}
                 </div>
             )
         }

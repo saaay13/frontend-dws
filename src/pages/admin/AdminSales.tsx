@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSales } from '../../hooks/useSales';
+import { useAuth } from '../../context/AuthContext';
 import { Tabla, CabeceraPaginaAdmin } from '../../components/molecules';
 import { Badge, Button } from '../../components/atoms';
 import { PlantillaAdmin } from '../../components/templates';
 import ModalEstadoVenta from '../../components/organisms/ModalEstadoVenta/ModalEstadoVenta';
 
 const AdminSales: React.FC = () => {
+    const { user } = useAuth();
     const { sales, loading, updateSale } = useSales();
     const [selectedSale, setSelectedSale] = React.useState<any>(null);
 
@@ -80,7 +82,7 @@ const AdminSales: React.FC = () => {
                 </div>
             )
         },
-        {
+        user?.rol === 'administrador' ? {
             header: 'Visibilidad',
             accessor: 'state',
             render: (s: any) => (
@@ -91,7 +93,7 @@ const AdminSales: React.FC = () => {
                     </span>
                 </div>
             )
-        },
+        } : null,
         {
             header: '',
             accessor: 'actions',
@@ -102,11 +104,11 @@ const AdminSales: React.FC = () => {
                     className="rounded-2xl font-black text-[9px] h-10 px-4 hover:scale-110 active:scale-95 transition-all bg-white shadow-xl shadow-primary/5 border-primary/10 hover:border-primary text-primary"
                     onClick={() => setSelectedSale(s)}
                 >
-                    GESTIONAR
+                    {user?.rol === 'administrador' ? 'GESTIONAR' : 'DETALLES'}
                 </Button>
             )
         }
-    ];
+    ].filter(Boolean) as any[];
 
     return (
         <PlantillaAdmin

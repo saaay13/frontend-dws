@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../../atoms';
+import { useAuth } from '../../../context/AuthContext';
 
 interface ModalEstadoVentaProps {
     sale: any;
@@ -9,12 +10,16 @@ interface ModalEstadoVentaProps {
 }
 
 const ModalEstadoVenta: React.FC<ModalEstadoVentaProps> = ({ sale, onClose, onSave, isSubmitting }) => {
+    const { user } = useAuth();
     const [stateSale, setStateSale] = useState(sale.state_sale);
     const [statePayment, setStatePayment] = useState(sale.state_payment);
     const [state, setState] = useState(sale.state);
 
+    const isReadOnly = user?.rol === 'vendedor';
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isReadOnly) return;
         const updateData = {
             ...sale,
             state_sale: stateSale,
@@ -36,8 +41,8 @@ const ModalEstadoVenta: React.FC<ModalEstadoVentaProps> = ({ sale, onClose, onSa
                 </button>
 
                 <div className="mb-8 space-y-1">
-                    <h2 className="text-3xl font-black text-foreground tracking-tighter">Gestionar <span className="text-primary-400">Venta</span></h2>
-                    <p className="text-muted-foreground font-medium">Actualiza el progreso y visibilidad de la Orden #V-{sale.id}</p>
+                    <h2 className="text-3xl font-black text-foreground tracking-tighter">{isReadOnly ? 'Detalles de' : 'Gestionar'} <span className="text-primary-400">Venta</span></h2>
+                    <p className="text-muted-foreground font-medium">Orden #V-{sale.id}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in zoom-in duration-300">
@@ -51,10 +56,11 @@ const ModalEstadoVenta: React.FC<ModalEstadoVentaProps> = ({ sale, onClose, onSa
                                         <button
                                             key={status}
                                             type="button"
-                                            onClick={() => setStateSale(status)}
+                                            onClick={() => !isReadOnly && setStateSale(status)}
+                                            disabled={isReadOnly && stateSale !== status}
                                             className={`h-11 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${stateSale === status
                                                     ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]'
-                                                    : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-primary/50'
+                                                    : isReadOnly ? 'hidden' : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-primary/50'
                                                 }`}
                                         >
                                             {status}
@@ -71,10 +77,11 @@ const ModalEstadoVenta: React.FC<ModalEstadoVentaProps> = ({ sale, onClose, onSa
                                         <button
                                             key={status}
                                             type="button"
-                                            onClick={() => setStatePayment(status)}
+                                            onClick={() => !isReadOnly && setStatePayment(status)}
+                                            disabled={isReadOnly && statePayment !== status}
                                             className={`h-10 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all flex items-center justify-between px-4 ${statePayment === status
                                                     ? 'bg-success text-white border-success shadow-lg shadow-success/20 scale-[1.02]'
-                                                    : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-success/50'
+                                                    : isReadOnly ? 'hidden' : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-success/50'
                                                 }`}
                                         >
                                             {status}
@@ -85,55 +92,89 @@ const ModalEstadoVenta: React.FC<ModalEstadoVentaProps> = ({ sale, onClose, onSa
                             </div>
                         </div>
 
-                        {/* Estado del Registro */}
-                        <div className="space-y-2 pt-4 border-t border-primary/10">
-                            <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Visibilidad del Registro</label>
-                            <div className="grid grid-cols-3 gap-2">
-                                {[
-                                    { id: 'activo', label: 'Habilitado', color: 'primary' },
-                                    { id: 'inactivo', label: 'Oculto', color: 'warning' },
-                                    { id: 'eliminado', label: 'Eliminar', color: 'error' }
-                                ].map((s) => (
-                                    <button
-                                        key={s.id}
-                                        type="button"
-                                        onClick={() => {
-                                            if (s.id === 'eliminado') {
-                                                if (confirm('¿ESTÁS SEGURO?\nEsta acción marcará la venta como eliminada.')) {
-                                                    setState(s.id);
-                                                }
-                                            } else {
-                                                setState(s.id);
-                                            }
-                                        }}
-                                        className={`h-10 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${state === s.id
-                                                ? `bg-${s.color} text-white border-${s.color} shadow-lg scale-[1.02]`
-                                                : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-neutral-300'
-                                            }`}
-                                    >
-                                        {s.label}
-                                    </button>
+                        {/* Detalle de productos (Añadido para el vendedor) */}
+                        <div className="pt-4 border-t border-primary/10">
+                            <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Productos</label>
+                            <div className="mt-2 space-y-2">
+                                {sale.detalles?.map((d: any, idx: number) => (
+                                    <div key={idx} className="flex justify-between items-center bg-white/30 p-2 rounded-xl border border-white/20">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-bold text-foreground">{d.product?.name}</span>
+                                            <span className="text-[8px] text-muted-foreground">Cantidad: {d.cantidad}</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-primary">${Number(d.subtotal).toFixed(2)}</span>
+                                    </div>
                                 ))}
+                                <div className="flex justify-between items-center pt-2 border-t border-primary/5">
+                                    <span className="text-[10px] font-black text-foreground uppercase">Total</span>
+                                    <span className="text-sm font-black text-primary">${Number(sale.total).toFixed(2)}</span>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Estado del Registro (Solo ADMIN) */}
+                        {!isReadOnly && (
+                            <div className="space-y-2 pt-4 border-t border-primary/10">
+                                <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Visibilidad del Registro</label>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {[
+                                        { id: 'activo', label: 'Habilitado', color: 'primary' },
+                                        { id: 'inactivo', label: 'Oculto', color: 'warning' },
+                                        { id: 'eliminado', label: 'Eliminar', color: 'error' }
+                                    ].map((s) => (
+                                        <button
+                                            key={s.id}
+                                            type="button"
+                                            onClick={() => {
+                                                if (s.id === 'eliminado') {
+                                                    if (confirm('¿ESTÁS SEGURO?\nEsta acción marcará la venta como eliminada.')) {
+                                                        setState(s.id);
+                                                    }
+                                                } else {
+                                                    setState(s.id);
+                                                }
+                                            }}
+                                            className={`h-10 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${state === s.id
+                                                    ? `bg-${s.color} text-white border-${s.color} shadow-lg scale-[1.02]`
+                                                    : 'bg-white/50 text-muted-foreground border-neutral-200 hover:border-neutral-300'
+                                                }`}
+                                        >
+                                            {s.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex gap-4">
-                        <Button
-                            type="submit"
-                            className="flex-grow h-12 font-black text-lg shadow-xl shadow-primary/20"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? 'GUARDANDO...' : 'ACTUALIZAR VENTA'}
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={onClose}
-                            className="h-12 px-8 font-bold border-neutral-200 hover:bg-neutral-50"
-                        >
-                            Cancelar
-                        </Button>
+                        {!isReadOnly ? (
+                            <Button
+                                type="submit"
+                                className="flex-grow h-12 font-black text-lg shadow-xl shadow-primary/20"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'GUARDANDO...' : 'ACTUALIZAR VENTA'}
+                            </Button>
+                        ) : (
+                            <Button
+                                type="button"
+                                onClick={onClose}
+                                className="flex-grow h-12 font-black text-lg shadow-xl shadow-primary/20"
+                            >
+                                CERRAR DETALLES
+                            </Button>
+                        )}
+                        {!isReadOnly && (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={onClose}
+                                className="h-12 px-8 font-bold border-neutral-200 hover:bg-neutral-50"
+                            >
+                                Cancelar
+                            </Button>
+                        )}
                     </div>
                 </form>
             </div>

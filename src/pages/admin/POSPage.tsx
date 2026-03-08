@@ -16,6 +16,13 @@ const POSPage: React.FC = () => {
     const [clientId, setClientId] = useState<number | null>(null);
     const [selectedSellerId, setSelectedSellerId] = useState<number | null>(user?.seller?.id || null);
 
+    // Sincronizar ID de vendedor cuando el usuario se carga
+    React.useEffect(() => {
+        if (user?.seller?.id && !selectedSellerId) {
+            setSelectedSellerId(user.seller.id);
+        }
+    }, [user, selectedSellerId]);
+
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())

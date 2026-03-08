@@ -35,7 +35,7 @@ function App() {
           <Route
             path="/products"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
                 <AdminProducts />
               </ProtectedRoute>
             }
@@ -44,7 +44,7 @@ function App() {
           <Route
             path="/categories"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador']}>
                 <AdminCategories />
               </ProtectedRoute>
             }
@@ -53,7 +53,7 @@ function App() {
           <Route
             path="/inventory"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador']}>
                 <AdminInventory />
               </ProtectedRoute>
             }
@@ -62,7 +62,7 @@ function App() {
           <Route
             path="/admin/lots"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
                 <AdminLots />
               </ProtectedRoute>
             }
@@ -71,7 +71,7 @@ function App() {
           <Route
             path="/admin/sales"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
                 <AdminSales />
               </ProtectedRoute>
             }
@@ -80,7 +80,7 @@ function App() {
           <Route
             path="/pos"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
                 <POSPage />
               </ProtectedRoute>
             }

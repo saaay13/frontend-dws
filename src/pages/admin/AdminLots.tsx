@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useLots } from '../../hooks/useLots';
 import { useProducts } from '../../hooks/useProducts';
+import { useAuth } from '../../context/AuthContext';
 import { Tabla, CabeceraPaginaAdmin, VistaPreviaEntidad } from '../../components/molecules';
 import { Badge } from '../../components/atoms';
 import { PlantillaAdmin } from '../../components/templates';
 import { ModalLote } from '../../components/organisms';
 
 const AdminLots: React.FC = () => {
+    const { user } = useAuth();
     const { lots, loading, fetchLots } = useLots();
     const { products } = useProducts();
     const [selectedLot, setSelectedLot] = useState<any>(null);
+
+    const isReadOnly = user?.rol === 'vendedor';
 
     const columns = [
         {
@@ -61,6 +65,15 @@ const AdminLots: React.FC = () => {
             )
         },
         {
+            header: 'Visibilidad',
+            accessor: 'state',
+            render: (l: any) => (
+                <Badge variant={l.state === 'activo' ? 'success' : 'error'}>
+                    {l.state === 'activo' ? 'Activo' : 'Inactivo'}
+                </Badge>
+            )
+        },
+        {
             header: 'Acciones',
             accessor: 'actions',
             render: (l: any) => (
@@ -68,7 +81,7 @@ const AdminLots: React.FC = () => {
                     onClick={() => setSelectedLot(l)}
                     className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
                 >
-                    ✎
+                    {isReadOnly ? '👁️' : '✎'}
                 </button>
             )
         },

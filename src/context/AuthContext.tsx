@@ -9,6 +9,8 @@ interface User {
     rol: 'administrador' | 'vendedor' | 'cliente';
     ci?: string;
     telefono?: string;
+    seller?: { id: number };
+    client?: { id: number };
 }
 
 interface AuthContextType {

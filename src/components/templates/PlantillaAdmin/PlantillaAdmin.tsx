@@ -4,15 +4,25 @@ interface PlantillaAdminProps {
     cabecera: React.ReactNode;
     contenido: React.ReactNode;
     blobs?: boolean;
+    isLoading?: boolean;
 }
 
 const PlantillaAdmin: React.FC<PlantillaAdminProps> = ({
     cabecera,
     contenido,
-    blobs = true
+    blobs = true,
+    isLoading = false
 }) => {
     return (
         <div className="min-h-screen mesh-gradient p-6 md:p-12 relative overflow-hidden">
+            {isLoading && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/50 backdrop-blur-sm animate-in fade-in duration-300">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="h-12 w-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                        <p className="text-primary font-black uppercase tracking-widest text-[10px] animate-pulse">Cargando...</p>
+                    </div>
+                </div>
+            )}
             {/* Elementos Decorativos (Blobs) */}
             {blobs && (
                 <>

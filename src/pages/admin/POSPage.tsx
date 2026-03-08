@@ -3,7 +3,8 @@ import { useProducts } from '../../hooks/useProducts';
 import { usePOS } from '../../hooks/usePOS';
 import { useAuth } from '../../context/AuthContext';
 import { Button, Input, Badge } from '../../components/atoms';
-import { CabeceraPaginaAdmin } from '../../components/molecules';
+import { CabeceraPaginaAdmin, SelectorCliente, SelectorVendedor } from '../../components/molecules';
+import { PlantillaAdmin } from '../../components/templates';
 
 const POSPage: React.FC = () => {
     const { user } = useAuth();
@@ -12,16 +13,8 @@ const POSPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [direccion, setDireccion] = useState('Tienda Central');
     const [metodoPago, setMetodoPago] = useState('Efectivo');
-    const [clientId] = useState<number | null>(null);
-
-    if (productsLoading) return (
-        <div className="min-h-screen mesh-gradient flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-                <div className="h-10 w-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-                <p className="text-primary font-black uppercase tracking-widest text-[10px] animate-pulse">Cargando catálogo...</p>
-            </div>
-        </div>
-    );
+    const [clientId, setClientId] = useState<number | null>(null);
+    const [selectedSellerId, setSelectedSellerId] = useState<number | null>(user?.seller?.id || null);
 
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -29,158 +22,196 @@ const POSPage: React.FC = () => {
     );
 
     const handleCheckout = async () => {
-        if (!user || !user.id) {
-            alert('Debes estar autenticado para realizar una venta');
+        const finalSellerId = user?.rol === 'administrador' ? selectedSellerId : user?.seller?.id;
+
+        if (!finalSellerId) {
+            alert('Error: Perfil de vendedor no encontrado.');
             return;
         }
 
         try {
             await processSale({
                 clientId,
-                sellerId: user.id,
+                sellerId: finalSellerId,
                 direccion,
                 metodoPago
             });
             alert('¡Venta realizada con éxito! El stock ha sido actualizado.');
-            fetchProducts(); // Recargar productos para ver el nuevo stock
+            fetchProducts();
         } catch (err: any) {
-            alert('Error al procesar la venta: ' + (err.response?.data?.mensaje || err.message));
+            console.error(err);
         }
     };
 
     return (
-        <div className="min-h-screen mesh-gradient p-4 md:p-8 flex flex-col md:flex-row gap-6">
-            {/* Productos */}
-            <div className="flex-grow space-y-6">
+        <PlantillaAdmin
+            isLoading={productsLoading || posLoading} // Usamos la carga de ambos hooks
+            cabecera={
                 <CabeceraPaginaAdmin
                     title="Punto de"
                     category="Ventas"
-                    subtitle="Registra salidas de productos y genera ventas al instante."
+                    subtitle="Registra salidas de productos y genera ventas al instante con gestión inteligente de stock."
+                    action={
+                        <div className="relative w-64 md:w-96 group">
+                            <Input
+                                placeholder="Buscar productos (Nombre o Categoría)..."
+                                value={searchTerm}
+                                onChange={(e: any) => setSearchTerm(e.target.value)}
+                                className="pl-12 h-14 text-sm rounded-2xl bg-white/5 border-white/10 group-hover:border-primary/30 transition-all"
+                            />
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl opacity-40 group-hover:opacity-100 transition-opacity">🔍</span>
+                        </div>
+                    }
                 />
+            }
+            contenido={
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    {/* Catálogo de Productos */}
+                    <div className="flex-grow grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom duration-700">
+                        {filteredProducts.map(product => {
+                            const stock = product.lots?.reduce((acc: number, l: any) => acc + (l.stock_disponible || 0), 0) || 0;
+                            return (
+                                <div
+                                    key={product.id}
+                                    onClick={() => stock > 0 && addToCart(product)}
+                                    className={`glass-card p-6 rounded-[2.5rem] border border-white/10 cursor-pointer transition-all duration-500 relative overflow-hidden group ${stock === 0 ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-[1.05] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10'}`}
+                                >
+                                    {/* Decoración */}
+                                    <div className="absolute -top-10 -right-10 h-32 w-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700" />
 
-                <div className="relative">
-                    <Input
-                        placeholder="Buscar productos..."
-                        value={searchTerm}
-                        onChange={(e: any) => setSearchTerm(e.target.value)}
-                        className="pl-12 h-14 text-lg rounded-2xl"
-                    />
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl opacity-40">🔍</span>
-                </div>
+                                    <div className="relative z-10 space-y-5">
+                                        <div className="space-y-1.5">
+                                            <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest">{product.category?.name || 'General'}</span>
+                                            <h3 className="text-lg font-black text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-2">{product.name}</h3>
+                                        </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto max-h-[calc(100vh-250px)] premium-scroll pr-2">
-                    {filteredProducts.map(product => {
-                        const stock = product.lots?.reduce((acc: number, l: any) => acc + l.stock_disponible, 0) || 0;
-                        return (
-                            <div
-                                key={product.id}
-                                onClick={() => stock > 0 && addToCart(product)}
-                                className={`glass-card p-6 rounded-[2rem] border border-white/10 cursor-pointer transition-all duration-300 relative overflow-hidden group ${stock === 0 ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-[1.03] hover:border-primary/30'}`}
-                            >
-                                <div className="absolute top-0 right-0 h-24 w-24 bg-primary/5 rounded-full -mr-12 -mt-12 blur-2xl group-hover:bg-primary/10 transition-colors" />
-
-                                <div className="relative z-10 space-y-4">
-                                    <div className="flex justify-between items-start gap-2">
-                                        <div className="space-y-1">
-                                            <p className="text-[9px] font-black text-primary uppercase tracking-widest">{product.category?.name || 'General'}</p>
-                                            <h3 className="font-bold text-foreground leading-tight group-hover:text-primary transition-colors">{product.name}</h3>
+                                        <div className="flex justify-between items-end">
+                                            <div className="flex flex-col">
+                                                <span className="text-[10px] font-bold text-muted-foreground uppercase">Precio</span>
+                                                <span className="text-2xl font-black font-mono text-foreground">${product.lots?.[0]?.precio_venta || '0.00'}</span>
+                                            </div>
+                                            <Badge variant={stock < 10 ? (stock === 0 ? 'error' : 'warning') : 'success'} size="sm" className="rounded-xl px-3 font-black">
+                                                {stock} PIEZAS
+                                            </Badge>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                        <div className="flex flex-col">
-                                            <span className="text-lg font-black font-mono text-foreground">${product.lots?.[0]?.precio_venta || '0.00'}</span>
+                                    {/* Overlay de Hover */}
+                                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-all duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                        <span className="bg-primary text-white p-3 rounded-full shadow-2xl scale-50 group-hover:scale-100 transition-all duration-500">
+                                            ➕
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Resumen de Venta / Carrito */}
+                    <aside className="w-full lg:w-[360px] animate-in fade-in slide-in-from-right duration-1000 delay-300">
+                        <div className="glass-card p-4 rounded-[1.5rem] border border-white/10 shadow-2xl space-y-4 sticky top-32">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-xl font-black tracking-tighter">Resumen</h2>
+                                <Badge variant="success" size="sm" className="rounded-xl px-3 py-1 font-black">{cart.length} ITEMS</Badge>
+                            </div>
+
+                            {/* Lista de Items */}
+                            <div className="space-y-2 max-h-[160px] overflow-y-auto premium-scroll pr-2">
+                                {cart.map(item => (
+                                    <div key={`${item.product_id}-${item.lot_id}`} className="flex justify-between items-center group/item bg-white/5 hover:bg-white/10 p-2 rounded-xl border border-white/5 transition-all">
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="text-[11px] font-black text-foreground truncate">{item.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[9px] font-mono text-primary-300 px-1 bg-primary/10 rounded">${item.price}</span>
+                                                <span className="text-[9px] font-bold text-muted-foreground">x {item.quantity}</span>
+                                            </div>
                                         </div>
-                                        <Badge variant={stock < 10 ? 'error' : 'success'} size="sm">
-                                            {stock} disp.
-                                        </Badge>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-black font-mono text-foreground">${(item.price * item.quantity).toFixed(2)}</span>
+                                            <button
+                                                onClick={() => removeFromCart(item.product_id, item.lot_id)}
+                                                className="h-6 w-6 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-lg transition-all"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                                {cart.length === 0 && (
+                                    <div className="flex flex-col items-center justify-center py-8 opacity-30 gap-2">
+                                        <span className="text-4xl">🛒</span>
+                                        <p className="font-bold uppercase tracking-widest text-[8px]">Vacío</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Configuración de Venta */}
+                            <div className="space-y-3 pt-4 border-t border-white/10">
+                                {user?.rol === 'administrador' && (
+                                    <SelectorVendedor
+                                        selectedId={selectedSellerId}
+                                        onSelect={(id) => setSelectedSellerId(id)}
+                                    />
+                                )}
+                                <SelectorCliente
+                                    selectedId={clientId}
+                                    onSelect={setClientId}
+                                />
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Pago</label>
+                                        <select
+                                            value={metodoPago}
+                                            onChange={(e: any) => setMetodoPago(e.target.value)}
+                                            className="h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-bold outline-none"
+                                        >
+                                            <option value="Efectivo" className="bg-slate-900">Efectivo</option>
+                                            <option value="Tarjeta" className="bg-slate-900">Tarjeta</option>
+                                            <option value="QR" className="bg-slate-900">QR / Transferencia</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Entrega</label>
+                                        <select
+                                            value={direccion === 'Tienda Central' ? 'Tienda' : 'Envio'}
+                                            onChange={(e: any) => setDireccion(e.target.value === 'Tienda' ? 'Tienda Central' : '')}
+                                            className="h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-bold outline-none"
+                                        >
+                                            <option value="Tienda" className="bg-slate-900">Tienda</option>
+                                            <option value="Envio" className="bg-slate-900">Envío</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
-            </div>
 
-            {/* Carrito */}
-            <aside className="w-full md:w-96 flex flex-col glass-card p-6 rounded-3xl border border-border/50 sticky top-24 self-start max-h-[calc(100vh-100px)]">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold flex items-center gap-2">
-                        🛒 Carrito <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">{cart.length}</span>
-                    </h2>
-                </div>
+                            {/* Totales y Acción */}
+                            <div className="space-y-3 pt-4 border-t border-white/10">
+                                {error && (
+                                    <p className="text-[9px] font-bold text-error bg-error/10 p-2 rounded-lg leading-tight uppercase">
+                                        ⚠️ {error}
+                                    </p>
+                                )}
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Total</span>
+                                    <span className="text-2xl font-black font-mono text-primary">
+                                        ${calculateTotal().toFixed(2)}
+                                    </span>
+                                </div>
 
-                <div className="flex-grow overflow-y-auto space-y-4 mb-6 premium-scroll pr-2">
-                    {cart.map(item => (
-                        <div key={`${item.product_id}-${item.lot_id}`} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/10 group">
-                            <div className="flex flex-col">
-                                <span className="text-sm font-bold text-primary-100">{item.name}</span>
-                                <span className="text-[10px] text-muted-foreground uppercase">Lote: {item.lot_code}</span>
-                                <span className="text-xs font-mono">${item.price} x {item.quantity}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="font-bold text-sm mx-2">${(item.price * item.quantity).toFixed(2)}</span>
-                                <button
-                                    onClick={() => removeFromCart(item.product_id, item.lot_id)}
-                                    className="text-error-dark opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-error/10 rounded-lg"
+                                <Button
+                                    onClick={handleCheckout}
+                                    className="w-full h-12 text-base font-black shadow-xl rounded-2xl"
+                                    disabled={cart.length === 0 || posLoading}
                                 >
-                                    ✕
-                                </button>
+                                    {posLoading ? '...' : 'CONFIRMAR'}
+                                </Button>
                             </div>
                         </div>
-                    ))}
-                    {cart.length === 0 && (
-                        <div className="text-center py-20 opacity-30 italic text-sm">El carrito está vacío</div>
-                    )}
+                    </aside>
                 </div>
-
-                <div className="border-t border-border/50 pt-6 space-y-4">
-                    <div className="space-y-3">
-                        <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Dirección de Entrega</label>
-                            <Input
-                                value={direccion}
-                                onChange={(e: any) => setDireccion(e.target.value)}
-                                className="h-9 text-xs"
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Método de Pago</label>
-                            <select
-                                value={metodoPago}
-                                onChange={(e: any) => setMetodoPago(e.target.value)}
-                                className="flex h-9 w-full rounded-xl border border-input bg-background/50 backdrop-blur-sm px-3 py-1 text-xs shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Tarjeta">Tarjeta de Crédito/Débito</option>
-                                <option value="Transferencia">Transferencia QR</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="flex justify-between items-center py-2">
-                        <span className="text-muted-foreground font-bold uppercase tracking-widest text-[10px]">Total a Pagar</span>
-                        <span className="text-3xl font-black font-mono text-primary-400">
-                            ${calculateTotal().toFixed(2)}
-                        </span>
-                    </div>
-
-                    {error && (
-                        <div className="p-3 rounded-xl bg-error/10 border border-error/20 text-error text-[10px] font-bold">
-                            ⚠️ {error}
-                        </div>
-                    )}
-
-                    <Button
-                        onClick={handleCheckout}
-                        className="w-full py-4 text-lg font-black shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                        disabled={cart.length === 0 || posLoading}
-                    >
-                        {posLoading ? 'Procesando...' : 'Finalizar Venta'}
-                    </Button>
-                </div>
-            </aside>
-        </div>
+            }
+        />
     );
 };
 

@@ -52,7 +52,7 @@ const POSPage: React.FC = () => {
 
     return (
         <PlantillaAdmin
-            isLoading={productsLoading || posLoading} // Usamos la carga de ambos hooks
+            isLoading={productsLoading || posLoading}
             cabecera={
                 <CabeceraPaginaAdmin
                     title="Punto de"

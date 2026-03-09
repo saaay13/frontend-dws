@@ -14,8 +14,7 @@ const AdminInventory: React.FC = () => {
 
     const columns = [
         {
-            header: 'Producto',
-            accessor: 'name',
+            header: 'Producto', accessor: 'name',
             render: (p: any) => (
                 <VistaPreviaEntidad
                     name={p.name}
@@ -26,8 +25,7 @@ const AdminInventory: React.FC = () => {
             )
         },
         {
-            header: 'Lotes Activos',
-            accessor: 'lots_count',
+            header: 'Lotes Activos', accessor: 'lots_count',
             render: (p: any) => (
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-foreground">{p.lots?.length || 0}</span>
@@ -36,16 +34,14 @@ const AdminInventory: React.FC = () => {
             )
         },
         {
-            header: 'Stock Disponible',
-            accessor: 'total_stock',
+            header: 'Stock Disponible', accessor: 'total_stock',
             render: (p: any) => {
                 const stock = p.lots?.reduce((acc: number, lot: any) => acc + (lot.stock_disponible || 0), 0) || 0;
                 return <ProgresoStock current={stock} />;
             }
         },
         {
-            header: 'Estado de Alerta',
-            accessor: 'status',
+            header: 'Estado de Alerta', accessor: 'status',
             render: (p: any) => {
                 const stock = p.lots?.reduce((acc: number, lot: any) => acc + (lot.stock_disponible || 0), 0) || 0;
                 if (stock === 0) return <Badge variant="error" className="animate-pulse">Agotado</Badge>;
@@ -73,7 +69,6 @@ const AdminInventory: React.FC = () => {
             contenido={
                 <div className="space-y-16">
                     <EstadisticasInventario skus={skus} alerts={alerts} totalUnits={totalUnits} />
-
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-700 delay-300">
                         <div className="flex items-center gap-6">
                             <h2 className="text-4xl font-black text-foreground tracking-tighter">Inventario Detallado</h2>

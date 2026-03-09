@@ -17,7 +17,6 @@ const GestorCategoria: React.FC<CategoryManagerProps> = ({
 }) => {
     const { categories: hookCategories, loading: hookLoading, deleteCategory: hookDelete } = useCategories();
 
-    // Priorizar props si existen, sino usar el hook (para compatibilidad)
     const categories = propCategories !== undefined ? propCategories : hookCategories;
     const loading = propLoading !== undefined ? propLoading : hookLoading;
     const deleteCategory = onDelete !== undefined ? onDelete : hookDelete;

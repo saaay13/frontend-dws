@@ -62,7 +62,7 @@ export const usePOS = () => {
             const data = {
                 seller_id: params.sellerId,
                 client_id: params.clientId,
-                fecha: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                fecha: new Date().toISOString().split('T')[0],
                 direccion_entrega: params.direccion,
                 metodo_pago: params.metodoPago,
                 productos: cart.map(item => ({

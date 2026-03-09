@@ -43,69 +43,40 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
 
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={['administrador', 'vendedor', 'cliente']}>
-                <DashboardRedirect />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/dashboard" element={
+            <ProtectedRoute allowedRoles={['administrador', 'vendedor', 'cliente']}>
+              <DashboardRedirect />
+            </ProtectedRoute>} />
 
+          <Route path="/products" element={
+            <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
+              <AdminProducts />
+            </ProtectedRoute>} />
 
-          <Route
-            path="/products"
-            element={
-              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
-                <AdminProducts />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/categories" element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <AdminCategories />
+            </ProtectedRoute>} />
 
-          <Route
-            path="/categories"
-            element={
-              <ProtectedRoute allowedRoles={['administrador']}>
-                <AdminCategories />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/inventory" element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <AdminInventory />
+            </ProtectedRoute>} />
 
-          <Route
-            path="/inventory"
-            element={
-              <ProtectedRoute allowedRoles={['administrador']}>
-                <AdminInventory />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/admin/lots" element={
+            <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
+              <AdminLots />
+            </ProtectedRoute>} />
 
-          <Route
-            path="/admin/lots"
-            element={
-              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
-                <AdminLots />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/admin/sales" element={
+            <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
+              <AdminSales />
+            </ProtectedRoute>} />
 
-          <Route
-            path="/admin/sales"
-            element={
-              <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
-                <AdminSales />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/store"
-            element={
-              <ProtectedRoute allowedRoles={['cliente']}>
-                <StorePage />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/store" element={
+            <ProtectedRoute allowedRoles={['cliente']}>
+              <StorePage />
+            </ProtectedRoute>} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

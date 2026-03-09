@@ -36,26 +36,26 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const addToCart = (product: any) => {
         setCart(prevCart => {
             const existingItem = prevCart.find(item => item.id === product.id);
-            const productPrice = typeof product.price === 'string' 
-                ? parseFloat(product.price) 
+            const productPrice = typeof product.price === 'string'
+                ? parseFloat(product.price)
                 : (Number(product.price) || 0);
 
             if (existingItem) {
                 if (existingItem.quantity < product.stock) {
                     return prevCart.map(item =>
                         item.id === product.id
-                            ? { ...item, quantity: item.quantity + 1, price: productPrice } // Update price too just in case
+                            ? { ...item, quantity: item.quantity + 1, price: productPrice }
                             : item
                     );
                 }
                 return prevCart;
             }
-            return [...prevCart, { 
-                id: product.id, 
-                name: product.name, 
-                price: productPrice, 
+            return [...prevCart, {
+                id: product.id,
+                name: product.name,
+                price: productPrice,
                 quantity: 1,
-                stock: product.stock 
+                stock: product.stock
             }];
         });
         setIsCartOpen(true);

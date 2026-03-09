@@ -53,7 +53,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setLoading(true);
         try {
             const response = await authService.login(credentials);
-            // Asumiendo que el backend devuelve { user: ..., token: ... }
             const { user: userData, token: userToken } = response;
 
             setUser(userData);

@@ -17,7 +17,6 @@ const VendedorDashboard: React.FC = () => {
 
     return (
         <div className="p-4 md:p-8 space-y-8">
-            {/* Simple Header with Action */}
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-primary/10 pb-6">
                 <div>
                     <h1 className="text-4xl font-black text-foreground tracking-tighter italic">Panel de <span className="text-primary-500">Ventas</span></h1>
@@ -56,7 +55,7 @@ const VendedorDashboard: React.FC = () => {
                         desc: 'Productos con stock bajo'
                     }
                 ].map((stat, i) => (
-                    <div 
+                    <div
                         key={i}
                         className={`glass-card group p-8 rounded-[2rem] border border-${stat.color}-500/10 bg-${stat.color}-50/5 hover:bg-${stat.color}-50/10 transition-all hover:shadow-2xl hover:shadow-${stat.color}-500/5`}
                     >
@@ -70,23 +69,21 @@ const VendedorDashboard: React.FC = () => {
                 ))}
             </div>
 
-            {/* Main Content Area */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Recent Sales Table */}
                 <div className="lg:col-span-2 glass-card rounded-[2.5rem] overflow-hidden border-white/40 shadow-xl shadow-primary/5">
                     <div className="p-8 border-b border-primary/5 flex items-center justify-between bg-primary/5">
                         <div className="flex items-center gap-4">
                             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">⚡</div>
                             <h2 className="text-2xl font-black tracking-tight italic">Ventas de Hoy</h2>
                         </div>
-                        <button 
+                        <button
                             onClick={() => navigate('/admin/sales')}
                             className="text-xs font-black text-primary hover:underline underline-offset-4 uppercase tracking-widest"
                         >
                             Ver Todas →
                         </button>
                     </div>
-                    
+
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
@@ -110,11 +107,10 @@ const VendedorDashboard: React.FC = () => {
                                             </td>
                                             <td className="px-8 py-6">
                                                 <div className="flex justify-center">
-                                                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
-                                                        sale.state_payment === 'pagado' 
-                                                        ? 'bg-success/10 text-success border border-success/20' 
+                                                    <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${sale.state_payment === 'pagado'
+                                                        ? 'bg-success/10 text-success border border-success/20'
                                                         : 'bg-amber-100 text-amber-700 border border-amber-200'
-                                                    }`}>
+                                                        }`}>
                                                         {sale.state_payment}
                                                     </span>
                                                 </div>
@@ -139,7 +135,6 @@ const VendedorDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Column / Inventory Preview */}
                 <div className="space-y-6">
                     <div className="glass-card p-8 rounded-[2.5rem] border-amber-500/10 bg-amber-50/5 shadow-xl shadow-amber-500/5">
                         <div className="flex items-center justify-between mb-8">
@@ -163,7 +158,6 @@ const VendedorDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Quick Access / Tips */}
                     <div className="glass-card p-8 rounded-[2.5rem] bg-indigo-600 text-white shadow-xl shadow-indigo-500/20">
                         <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center text-xl mb-6">💡</div>
                         <h4 className="text-lg font-black mb-2">Consejo del Día</h4>

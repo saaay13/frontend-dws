@@ -23,7 +23,6 @@ const PlantillaAdmin: React.FC<PlantillaAdminProps> = ({
                     </div>
                 </div>
             )}
-            {/* Elementos Decorativos (Blobs) */}
             {blobs && (
                 <>
                     <div className="blob -top-20 -right-20 w-[800px] h-[800px] opacity-10 animate-pulse" />
@@ -33,12 +32,10 @@ const PlantillaAdmin: React.FC<PlantillaAdminProps> = ({
             )}
 
             <div className="max-w-7xl mx-auto space-y-10 relative z-10">
-                {/* Slot para la Cabecera */}
                 <div className="animate-in fade-in slide-in-from-top duration-700">
                     {cabecera}
                 </div>
 
-                {/* Slot para el Contenido Principal */}
                 <div className="animate-in fade-in slide-in-from-bottom duration-1000 delay-200">
                     {contenido}
                 </div>

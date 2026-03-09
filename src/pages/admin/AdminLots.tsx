@@ -17,8 +17,7 @@ const AdminLots: React.FC = () => {
 
     const columns = [
         {
-            header: 'Código / Lote',
-            accessor: 'codigo_lote',
+            header: 'Código / Lote', accessor: 'codigo_lote',
             render: (l: any) => (
                 <div className="flex flex-col">
                     <span className="text-xs font-black text-primary uppercase">{l.codigo_lote}</span>
@@ -27,8 +26,7 @@ const AdminLots: React.FC = () => {
             )
         },
         {
-            header: 'Producto Relacionado',
-            accessor: 'product',
+            header: 'Producto Relacionado', accessor: 'product',
             render: (l: any) => {
                 const product = products.find(p => p.id === l.product_id);
                 return (
@@ -42,8 +40,7 @@ const AdminLots: React.FC = () => {
             }
         },
         {
-            header: 'Inversión / Venta',
-            accessor: 'precio_compra',
+            header: 'Inversión / Venta', accessor: 'precio_compra',
             render: (l: any) => (
                 <div className="flex flex-col">
                     <span className="text-[10px] font-black text-error">COMPRA: ${l.precio_compra}</span>
@@ -52,8 +49,7 @@ const AdminLots: React.FC = () => {
             )
         },
         {
-            header: 'Stock Actual',
-            accessor: 'stock_disponible',
+            header: 'Stock Actual', accessor: 'stock_disponible',
             render: (l: any) => (
                 <div className="flex items-center gap-2">
                     <div className="flex flex-col">
@@ -65,8 +61,7 @@ const AdminLots: React.FC = () => {
             )
         },
         {
-            header: 'Visibilidad',
-            accessor: 'state',
+            header: 'Visibilidad', accessor: 'state',
             render: (l: any) => (
                 <Badge variant={l.state === 'activo' ? 'success' : 'error'}>
                     {l.state === 'activo' ? 'Activo' : 'Inactivo'}
@@ -74,8 +69,7 @@ const AdminLots: React.FC = () => {
             )
         },
         {
-            header: 'Acciones',
-            accessor: 'actions',
+            header: 'Acciones', accessor: 'actions',
             render: (l: any) => (
                 <button
                     onClick={() => setSelectedLot(l)}
@@ -86,8 +80,7 @@ const AdminLots: React.FC = () => {
             )
         },
         {
-            header: 'Fecha Compra',
-            accessor: 'fecha_compra',
+            header: 'Fecha Compra', accessor: 'fecha_compra',
             render: (l: any) => (
                 <span className="text-xs font-bold text-foreground">
                     {l.fecha_compra}

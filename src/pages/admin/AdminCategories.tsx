@@ -46,10 +46,8 @@ const AdminCategories: React.FC = () => {
                     category="Catálogo"
                     subtitle="Organiza tus productos para una navegación y búsqueda eficiente."
                     action={
-                        <Button
-                            onClick={() => setShowForm(true)}
-                            className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform"
-                        >
+                        <Button onClick={() => setShowForm(true)}
+                            className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform">
                             <span className="mr-2">+</span> Nueva Categoría
                         </Button>
                     }

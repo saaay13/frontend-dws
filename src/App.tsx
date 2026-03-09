@@ -9,6 +9,8 @@ import AdminInventory from './pages/admin/AdminInventory';
 import AdminLots from './pages/admin/AdminLots';
 import AdminSales from './pages/admin/AdminSales';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUsers from './pages/admin/AdminUsers';
+import POSPage from './pages/admin/POSPage';
 import VendedorDashboard from './pages/vendedor/VendedorDashboard';
 import ClienteDashboard from './pages/cliente/ClienteDashboard';
 import StorePage from './pages/cliente/StorePage';
@@ -71,6 +73,16 @@ function App() {
           <Route path="/admin/sales" element={
             <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
               <AdminSales />
+            </ProtectedRoute>} />
+
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={['administrador']}>
+              <AdminUsers />
+            </ProtectedRoute>} />
+
+          <Route path="/pos" element={
+            <ProtectedRoute allowedRoles={['administrador', 'vendedor']}>
+              <POSPage />
             </ProtectedRoute>} />
 
           <Route path="/store" element={

@@ -16,7 +16,6 @@ const POSPage: React.FC = () => {
     const [clientId, setClientId] = useState<number | null>(null);
     const [selectedSellerId, setSelectedSellerId] = useState<number | null>(user?.seller?.id || null);
 
-    // Sincronizar ID de vendedor cuando el usuario se carga
     React.useEffect(() => {
         if (user?.seller?.id && !selectedSellerId) {
             setSelectedSellerId(user.seller.id);
@@ -55,8 +54,7 @@ const POSPage: React.FC = () => {
             isLoading={productsLoading || posLoading}
             cabecera={
                 <CabeceraPaginaAdmin
-                    title="Punto de"
-                    category="Ventas"
+                    title="Punto de Venta"
                     subtitle="Registra salidas de productos y genera ventas al instante con gestión inteligente de stock."
                     action={
                         <div className="relative w-64 md:w-96 group">

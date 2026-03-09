@@ -26,6 +26,7 @@ const Navbar: React.FC = () => {
             { label: 'Categorías', path: '/categories' },
             { label: 'Inventario', path: '/inventory' },
             { label: 'Lotes', path: '/admin/lots' },
+            { label: 'Usuarios', path: '/admin/users' },
             { label: 'Ventas', path: '/admin/sales' },
             { label: 'POS (Venta)', path: '/pos' },
         ],
@@ -119,11 +120,11 @@ const Navbar: React.FC = () => {
                             </Button>
                         </div>
                     )}
-                    
+
                     {user?.rol === 'cliente' && (
-                        <Button 
-                            variant="primary" 
-                            size="sm" 
+                        <Button
+                            variant="primary"
+                            size="sm"
                             onClick={() => setIsCartOpen(true)}
                             className="relative rounded-xl h-10 w-10 p-0 flex items-center justify-center shadow-lg shadow-primary/30"
                         >

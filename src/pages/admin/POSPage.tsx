@@ -74,36 +74,47 @@ const POSPage: React.FC = () => {
                     {/* Catalogo de Productos */}
                     <div className="flex-grow grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom duration-700">
                         {filteredProducts.map(product => {
+                            const availableLot = product.lots?.find((l: any) => l.stock_disponible > 0);
                             const stock = product.lots?.reduce((acc: number, l: any) => acc + (l.stock_disponible || 0), 0) || 0;
+                            const displayPrice = availableLot ? availableLot.precio_venta : (product.lots?.[0]?.precio_venta || '0.00');
+
                             return (
                                 <div
                                     key={product.id}
                                     onClick={() => stock > 0 && addToCart(product)}
-                                    className={`glass-card p-6 rounded-[2.5rem] border border-white/10 cursor-pointer transition-all duration-500 relative overflow-hidden group ${stock === 0 ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-[1.05] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10'}`}
+                                    className={`glass-card p-4 rounded-[2.5rem] border border-white/10 cursor-pointer transition-all duration-500 relative overflow-hidden group ${stock === 0 ? 'opacity-40 grayscale pointer-events-none' : 'hover:scale-[1.05] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10'}`}
                                 >
-                                    {/* Decoracion */}
                                     <div className="absolute -top-10 -right-10 h-32 w-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all duration-700" />
 
-                                    <div className="relative z-10 space-y-5">
-                                        <div className="space-y-1.5">
-                                            <span className="text-[10px] font-black text-primary-400 uppercase tracking-widest">{product.category?.name || 'General'}</span>
-                                            <h3 className="text-lg font-black text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-2">{product.name}</h3>
+                                    <div className="relative z-10 space-y-4">
+                                        {/* Imagen del Producto */}
+                                        <div className="h-32 w-full rounded-2xl overflow-hidden bg-white/5 border border-white/5">
+                                            <img
+                                                src={product.image_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${product.name}`}
+                                                alt={product.name}
+                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <span className="text-[9px] font-black text-primary-400 uppercase tracking-widest">{product.category?.name || 'General'}</span>
+                                            <h3 className="text-sm font-black text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-1">{product.name}</h3>
                                         </div>
 
                                         <div className="flex justify-between items-end">
                                             <div className="flex flex-col">
-                                                <span className="text-[10px] font-bold text-muted-foreground uppercase">Precio</span>
-                                                <span className="text-2xl font-black font-mono text-foreground">Bs {product.lots?.[0]?.precio_venta || '0.00'}</span>
+                                                <span className="text-[9px] font-bold text-muted-foreground uppercase">Precio</span>
+                                                <span className="text-xl font-black font-mono text-foreground">Bs {displayPrice}</span>
                                             </div>
-                                            <Badge variant={stock < 10 ? (stock === 0 ? 'error' : 'warning') : 'success'} size="sm" className="rounded-xl px-3 font-black">
-                                                {stock} PIEZAS
+                                            <Badge variant={stock < 10 ? (stock === 0 ? 'error' : 'warning') : 'success'} size="sm" className="rounded-xl px-2 py-0.5 text-[9px] font-black">
+                                                {stock}u
                                             </Badge>
                                         </div>
                                     </div>
 
                                     {/* Overlay de Hover */}
                                     <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-all duration-500 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                        <span className="bg-primary text-white p-3 rounded-full shadow-2xl scale-50 group-hover:scale-100 transition-all duration-500">
+                                        <span className="bg-primary text-white h-10 w-10 flex items-center justify-center rounded-full shadow-2xl scale-50 group-hover:scale-100 transition-all duration-500">
                                             ➕
                                         </span>
                                     </div>
@@ -123,8 +134,15 @@ const POSPage: React.FC = () => {
                             {/* Lista de Items */}
                             <div className="space-y-2 max-h-[160px] overflow-y-auto premium-scroll pr-2">
                                 {cart.map(item => (
-                                    <div key={`${item.product_id}-${item.lot_id}`} className="flex justify-between items-center group/item bg-white/5 hover:bg-white/10 p-2 rounded-xl border border-white/5 transition-all">
-                                        <div className="flex flex-col min-w-0">
+                                    <div key={`${item.product_id}-${item.lot_id}`} className="flex justify-between items-center group/item bg-white/5 hover:bg-white/10 p-2 rounded-xl border border-white/5 transition-all gap-3">
+                                        <div className="h-10 w-10 min-w-[40px] rounded-lg overflow-hidden bg-white/10">
+                                            <img
+                                                src={item.image_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${item.name}`}
+                                                alt={item.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col min-w-0 flex-grow">
                                             <span className="text-[11px] font-black text-foreground truncate">{item.name}</span>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-[9px] font-mono text-primary-300 px-1 bg-primary/10 rounded">Bs {item.price}</span>

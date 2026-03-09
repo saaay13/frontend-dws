@@ -42,10 +42,20 @@ const AdminSales: React.FC = () => {
             render: (s: any) => (
                 <div className="flex flex-wrap gap-1.5 max-w-[300px]">
                     {s.detalles?.map((d: any, idx: number) => (
-                        <div key={idx} className="flex items-center bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-xl border border-white/5 transition-all cursor-default">
-                            <span className="text-[9px] font-black text-primary-300 truncate max-w-[120px]">{d.product?.name || 'Producto'}</span>
-                            <span className="mx-1 opacity-30 text-[8px]">|</span>
-                            <span className="text-[9px] font-black text-foreground">x{d.cantidad}</span>
+                        <div key={idx} className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-xl border border-white/5 transition-all cursor-default overflow-hidden">
+                            <img
+                                src={d.product?.image_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${d.product?.name}`}
+                                alt={d.product?.name}
+                                className="h-4 w-4 rounded-sm object-cover opacity-50"
+                            />
+                            <div className="flex flex-col">
+                                <span className="text-[9px] font-black text-primary-300 truncate max-w-[100px]">{d.product?.name || 'Producto'}</span>
+                                <div className="flex items-center gap-1 text-[8px] font-bold text-muted-foreground">
+                                    <span>Bs {(d.subtotal / d.cantidad).toFixed(2)}</span>
+                                    <span>x</span>
+                                    <span className="text-foreground">{d.cantidad}</span>
+                                </div>
+                            </div>
                         </div>
                     ))}
                     {!s.detalles?.length && <span className="text-[10px] text-muted-foreground italic font-medium">Sin detalles de productos</span>}

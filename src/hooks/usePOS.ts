@@ -31,6 +31,7 @@ export const usePOS = () => {
             setCart([...cart, {
                 product_id: product.id,
                 name: product.name,
+                image_url: product.image_url,
                 lot_id: availableLot.id,
                 lot_code: availableLot.codigo_lote,
                 price: availableLot.precio_venta,

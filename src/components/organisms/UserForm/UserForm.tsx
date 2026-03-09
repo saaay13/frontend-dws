@@ -15,7 +15,9 @@ const UserForm: React.FC<UserFormProps> = ({ onSave, onCancel, initialData, isSu
         ci: initialData?.ci || '',
         telefono: initialData?.telefono || '',
         rol: initialData?.rol || 'cliente',
+        state: initialData?.state || 'activo',
         email: initialData?.email || '',
+        puntos: initialData?.client?.puntos || 0,
         password: ''
     });
 
@@ -83,6 +85,19 @@ const UserForm: React.FC<UserFormProps> = ({ onSave, onCancel, initialData, isSu
                     </select>
                 </div>
                 <div className="space-y-2">
+                    <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Estado</label>
+                    <select
+                        value={formData.state}
+                        onChange={(e: any) => setFormData({ ...formData, state: e.target.value })}
+                        className="w-full h-12 bg-background/50 backdrop-blur-sm border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 px-4 rounded-xl text-sm appearance-none border font-medium"
+                        required
+                    >
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                        <option value="eliminado">Eliminado</option>
+                    </select>
+                </div>
+                <div className="space-y-2">
                     <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Correo Electrónico</label>
                     <Input
                         type="email"
@@ -93,9 +108,21 @@ const UserForm: React.FC<UserFormProps> = ({ onSave, onCancel, initialData, isSu
                         className="premium-input h-12"
                     />
                 </div>
-                <div className="md:col-span-2 space-y-2">
+                {formData.rol === 'cliente' && (
+                    <div className="space-y-2">
+                        <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">Puntos DWS</label>
+                        <Input
+                            type="number"
+                            value={formData.puntos || 0}
+                            onChange={(e: any) => setFormData({ ...formData, puntos: e.target.value })}
+                            placeholder="0"
+                            className="premium-input h-12"
+                        />
+                    </div>
+                )}
+                <div className={(formData.rol === 'cliente') ? 'md:col-span-1 space-y-2' : 'md:col-span-1 space-y-2'}>
                     <label className="text-xs font-black text-primary-300 uppercase tracking-widest pl-1">
-                        Contraseña {initialData && '(Dejar vacío para no cambiar)'}
+                        Contraseña {initialData && '(Opcional)'}
                     </label>
                     <Input
                         type="password"

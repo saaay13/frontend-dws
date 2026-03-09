@@ -78,6 +78,36 @@ const AdminUsers: React.FC = () => {
             }
         },
         {
+            header: 'Estado',
+            accessor: 'state',
+            render: (u: any) => (
+                <Badge
+                    variant={u.state === 'activo' ? 'success' : u.state === 'inactivo' ? 'warning' : 'error'}
+                    className="uppercase font-black text-[9px] px-3"
+                >
+                    {u.state}
+                </Badge>
+            )
+        },
+        {
+            header: 'Info Extra',
+            accessor: 'id',
+            render: (u: any) => (
+                <div className="flex flex-col">
+                    {u.rol === 'cliente' && (
+                        <span className="text-[10px] font-black text-primary uppercase">
+                            🪙 {u.client?.puntos || 0} Pts
+                        </span>
+                    )}
+                    {u.rol === 'vendedor' && (
+                        <span className="text-[10px] font-black text-success uppercase">
+                            💼 Perfil Activo
+                        </span>
+                    )}
+                </div>
+            )
+        },
+        {
             header: 'Acciones',
             accessor: 'id',
             render: (u: any) => (
@@ -89,9 +119,10 @@ const AdminUsers: React.FC = () => {
                         ✎
                     </button>
                     <button
-                        onClick={() => {
-                            if (window.confirm('¿Estás seguro de inactivar este usuario?')) {
-                                deleteUser(u.id);
+                        onClick={async () => {
+                            if (window.confirm('¿Estás seguro de eliminar este usuario?')) {
+                                await deleteUser(u.id);
+                                fetchUsers();
                             }
                         }}
                         className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"

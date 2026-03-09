@@ -14,7 +14,7 @@ const StorePage: React.FC = () => {
 
     const filteredProducts = products.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             p.description?.toLowerCase().includes(searchTerm.toLowerCase());
+            p.description?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory ? p.category_id === selectedCategory : true;
         return matchesSearch && matchesCategory && p.state !== 'eliminado';
     });
@@ -73,33 +73,32 @@ const StorePage: React.FC = () => {
                             {filteredProducts.map(product => (
                                 <div key={product.id} className="group glass-card overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-all duration-500 border-white/40 flex flex-col h-full">
                                     <div className="aspect-square bg-muted/10 relative overflow-hidden">
-                                         <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-secondary/5 group-hover:opacity-0 transition-opacity"></div>
-                                         <img 
-                                            src={`https://api.dicebear.com/7.x/identicon/svg?seed=${product.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`} 
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-secondary/5 group-hover:opacity-0 transition-opacity"></div>
+                                        <img
+                                            src={product.image_url || `https://api.dicebear.com/7.x/identicon/svg?seed=${product.name}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
                                             alt={product.name}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80"
-                                         />
-                                         <Badge className="absolute top-4 right-4 bg-white/80 backdrop-blur-md text-primary font-black border-none px-3 py-1">
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <Badge className="absolute top-4 right-4 bg-white/80 backdrop-blur-md text-primary font-black border-none px-3 py-1">
                                             ${product.price}
-                                         </Badge>
+                                        </Badge>
                                     </div>
                                     <div className="p-6 flex flex-col flex-grow">
                                         <h3 className="text-xl font-black leading-tight group-hover:text-primary transition-colors">{product.name}</h3>
                                         <p className="text-sm text-muted-foreground mt-2 line-clamp-2 flex-grow">{product.description || 'Sin descripción disponible.'}</p>
-                                        
+
                                         <div className="mt-6 flex items-center justify-between">
                                             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                                                 Stock: <span className={product.stock > 10 ? 'text-emerald-500' : 'text-amber-500'}>{product.stock} disp.</span>
                                             </span>
-                                            <Button 
-                                                size="sm" 
+                                            <Button
+                                                size="sm"
                                                 onClick={() => addToCart(product)}
                                                 disabled={product.stock <= 0}
-                                                className={`rounded-xl shadow-lg transition-all ${
-                                                    product.stock <= 0 
-                                                    ? 'opacity-50 cursor-not-allowed bg-neutral-200 text-neutral-500 shadow-none' 
-                                                    : 'shadow-primary/20 hover:shadow-primary/40 active:translate-y-1'
-                                                }`}
+                                                className={`rounded-xl shadow-lg transition-all ${product.stock <= 0
+                                                        ? 'opacity-50 cursor-not-allowed bg-neutral-200 text-neutral-500 shadow-none'
+                                                        : 'shadow-primary/20 hover:shadow-primary/40 active:translate-y-1'
+                                                    }`}
                                             >
                                                 {product.stock <= 0 ? 'Agotado' : 'Añadir'}
                                             </Button>
@@ -109,7 +108,7 @@ const StorePage: React.FC = () => {
                             ))}
                         </div>
                     )}
-                    
+
                     {!productsLoading && filteredProducts.length === 0 && (
                         <div className="text-center py-20 opacity-40 italic">
                             <p className="text-5xl mb-4">🔍</p>

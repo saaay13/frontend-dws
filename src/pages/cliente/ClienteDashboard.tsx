@@ -28,7 +28,7 @@ const ClienteDashboard: React.FC = () => {
                 </button>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="max-w-4xl mx-auto">
                 {/* Historial */}
                 <div className="glass-card p-8 border-white/40">
                     <h2 className="text-xl font-black mb-6 flex items-center gap-2">
@@ -43,7 +43,7 @@ const ClienteDashboard: React.FC = () => {
                                             📄
                                         </div>
                                         <div>
-                                            <p className="font-bold text-neutral-900">Orden #{sale.id}</p>
+                                            <p className="font-bold text-neutral-900">Tu Orden</p>
                                             <p className="text-xs text-neutral-500 font-medium">Comprado el {new Date(sale.created_at).toLocaleDateString()}</p>
                                         </div>
                                     </div>
@@ -65,46 +65,6 @@ const ClienteDashboard: React.FC = () => {
                             </div>
                         )}
                     </div>
-                </div>
-
-                {/* Perfil */}
-                <div className="relative p-8 bg-gradient-to-br from-primary-600 to-primary-800 text-white rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 flex flex-col justify-between">
-                    <div className="absolute top-0 right-0 h-full w-1/2 bg-primary/20 blur-3xl rounded-full translate-x-1/2 -z-0"></div>
-                    
-                    <div className="relative z-10">
-                        <div className="flex justify-between items-start mb-8">
-                            <h2 className="text-xl font-black text-white">Perfil del Cliente</h2>
-                            <div className="px-4 py-2 bg-white/10 rounded-xl border border-white/20">
-                                <p className="text-[10px] font-bold uppercase tracking-tighter text-white/60">Puntos DWS</p>
-                                <p className="text-2xl font-black leading-none mt-1 text-white">{stats?.points || 0}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-6 mb-10">
-                            <div className="h-20 w-20 rounded-2xl bg-white/10 border border-white/20 p-1 shrink-0">
-                                <img src={`https://i.pravatar.cc/100?u=${profile?.id}`} className="h-full w-full rounded-xl object-cover" alt="avatar" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-black leading-tight text-white">{profile?.name} {profile?.apellidos}</p>
-                                <p className="text-white/60 text-sm font-medium">{profile?.email}</p>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                                <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">CI / Identificación</p>
-                                <p className="font-bold text-lg text-white">{profile?.ci || 'No registrado'}</p>
-                            </div>
-                            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                                <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Teléfono / WhatsApp</p>
-                                <p className="font-bold text-lg text-white">{profile?.telefono || 'No registrado'}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button className="mt-8 w-full py-4 bg-primary text-white font-black rounded-2xl hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all shadow-lg relative z-10">
-                        Actualizar Perfil
-                    </button>
                 </div>
             </div>
         </div>

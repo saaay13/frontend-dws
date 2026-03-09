@@ -12,10 +12,10 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import POSPage from './pages/admin/POSPage';
 import VendedorDashboard from './pages/vendedor/VendedorDashboard';
-import ClienteDashboard from './pages/cliente/ClienteDashboard';
 import StorePage from './pages/cliente/StorePage';
 import ProtectedRoute from './guards/ProtectedRoute';
 import { useAuth } from './context/AuthContext';
+import ClienteDashboard from './pages/cliente/ClienteDashboard';
 import './App.css';
 
 const DashboardRedirect = () => {
@@ -29,7 +29,7 @@ const DashboardRedirect = () => {
     case 'vendedor':
       return <VendedorDashboard />;
     case 'cliente':
-      return <ClienteDashboard />;
+      return <HomePage />;
     default:
       return <Navigate to="/" replace />;
   }
@@ -88,6 +88,11 @@ function App() {
           <Route path="/store" element={
             <ProtectedRoute allowedRoles={['cliente']}>
               <StorePage />
+            </ProtectedRoute>} />
+
+          <Route path="/miscompras" element={
+            <ProtectedRoute allowedRoles={['cliente']}>
+              <ClienteDashboard />
             </ProtectedRoute>} />
         </Route>
 

@@ -11,7 +11,7 @@ const EstadisticasInventario: React.FC<EstadisticasInventarioProps> = ({ skus, a
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <CardEstado
-                label="Referencias (SKUs)"
+                label="Cantidad de Productos"
                 value={skus}
                 variant="primary"
                 trend="↑ Activos"

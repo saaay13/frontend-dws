@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
 
     const menuItems = {
         administrador: [
-            { label: 'Dashboard', path: '/dashboard' },
+            { label: 'Inicio', path: '/dashboard' },
             { label: 'Productos', path: '/products' },
             { label: 'Categorías', path: '/categories' },
             { label: 'Inventario', path: '/inventory' },
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             { label: 'POS (Venta)', path: '/pos' },
         ],
         vendedor: [
-            { label: 'Dashboard', path: '/dashboard' },
+            { label: 'Inicio', path: '/dashboard' },
             { label: 'POS (Venta)', path: '/pos' },
             { label: 'Productos', path: '/products' },
             { label: 'Lotes', path: '/admin/lots' },
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
         cliente: [
             { label: 'Inicio', path: '/' },
             { label: 'Tienda', path: '/store' },
-            { label: 'Mis Compras', path: '/dashboard' },
+            { label: 'Mis Compras', path: '/miscompras' },
         ],
 
     };

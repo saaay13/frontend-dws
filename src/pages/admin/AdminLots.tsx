@@ -43,8 +43,8 @@ const AdminLots: React.FC = () => {
             header: 'Inversión / Venta', accessor: 'precio_compra',
             render: (l: any) => (
                 <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-error">COMPRA: ${l.precio_compra}</span>
-                    <span className="text-sm font-black text-success">VENTA: ${l.precio_venta}</span>
+                    <span className="text-[10px] font-black text-error">COMPRA: Bs {l.precio_compra}</span>
+                    <span className="text-sm font-black text-success">VENTA: Bs {l.precio_venta}</span>
                 </div>
             )
         },
@@ -75,7 +75,7 @@ const AdminLots: React.FC = () => {
                     onClick={() => setSelectedLot(l)}
                     className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
                 >
-                    {isReadOnly ? '👁️' : '✎'}
+                    {isReadOnly ? '☰' : '✎'}
                 </button>
             )
         },

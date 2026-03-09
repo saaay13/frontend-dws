@@ -4,16 +4,16 @@ import { posService } from '../../../services/posService';
 import { Button } from '../../atoms';
 
 const CartDrawer: React.FC = () => {
-    const { 
-        cart, 
-        removeFromCart, 
-        updateQuantity, 
-        total, 
-        isCartOpen, 
-        setIsCartOpen, 
-        clearCart 
+    const {
+        cart,
+        removeFromCart,
+        updateQuantity,
+        total,
+        isCartOpen,
+        setIsCartOpen,
+        clearCart
     } = useCart();
-    
+
     const [loading, setLoading] = useState(false);
     const [direccionEntrega, setDireccionEntrega] = useState('');
     const [metodoPago, setMetodoPago] = useState('Transferencia / QR');
@@ -28,8 +28,8 @@ const CartDrawer: React.FC = () => {
         setLoading(true);
         try {
             const saleData = {
-                seller_id: null, 
-                client_id: null, 
+                seller_id: null,
+                client_id: null,
                 fecha: new Date().toISOString().split('T')[0],
                 direccion_entrega: direccionEntrega,
                 metodo_pago: metodoPago,
@@ -57,11 +57,11 @@ const CartDrawer: React.FC = () => {
     return (
         <div className="fixed inset-0 z-[100] flex justify-end">
             {/* Overlay */}
-            <div 
+            <div
                 className="absolute inset-0 bg-background/40 backdrop-blur-sm animate-in fade-in duration-300"
                 onClick={() => setIsCartOpen(false)}
             />
-            
+
             {/* Drawer */}
             <div className="relative w-full max-w-md bg-white/80 backdrop-blur-xl border-l border-white/40 shadow-2xl flex flex-col animate-in slide-in-from-right duration-500">
                 <header className="p-6 border-b border-neutral-100 flex justify-between items-center bg-white/50">
@@ -69,7 +69,7 @@ const CartDrawer: React.FC = () => {
                         <h2 className="text-2xl font-black text-foreground">Tu Carrito</h2>
                         <p className="text-sm text-muted-foreground mt-1">Listo para materializar tus proyectos.</p>
                     </div>
-                    <button 
+                    <button
                         onClick={() => setIsCartOpen(false)}
                         className="h-10 w-10 rounded-xl bg-muted/20 flex items-center justify-center hover:bg-muted/30 transition-colors"
                     >
@@ -96,16 +96,16 @@ const CartDrawer: React.FC = () => {
                                     </div>
                                     <div className="flex-grow">
                                         <h4 className="font-black text-sm group-hover:text-primary transition-colors">{item.name}</h4>
-                                        <p className="text-primary font-bold text-lg">${item.price}</p>
+                                        <p className="text-primary font-bold text-lg">Bs {item.price}</p>
                                         <div className="flex items-center gap-2 mt-2">
-                                            <button 
+                                            <button
                                                 onClick={() => updateQuantity(item.id, -1)}
                                                 className="h-8 w-8 rounded-lg bg-muted/20 hover:bg-muted/30 flex items-center justify-center font-bold"
                                             >
                                                 -
                                             </button>
                                             <span className="w-8 text-center font-black">{item.quantity}</span>
-                                            <button 
+                                            <button
                                                 onClick={() => updateQuantity(item.id, 1)}
                                                 className="h-8 w-8 rounded-lg bg-muted/20 hover:bg-muted/30 flex items-center justify-center font-bold"
                                             >
@@ -113,7 +113,7 @@ const CartDrawer: React.FC = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    <button 
+                                    <button
                                         onClick={() => removeFromCart(item.id)}
                                         className="p-2 text-muted-foreground hover:text-error transition-colors"
                                     >
@@ -130,8 +130,8 @@ const CartDrawer: React.FC = () => {
                                 <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground px-1">Detalles de Entrega</h3>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold text-muted-foreground ml-1 uppercase">Dirección de Envío</label>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         placeholder="Ej: Av. Las Américas 123"
                                         value={direccionEntrega}
                                         onChange={(e) => setDireccionEntrega(e.target.value)}
@@ -147,11 +147,10 @@ const CartDrawer: React.FC = () => {
                                         <button
                                             key={metodo}
                                             onClick={() => setMetodoPago(metodo)}
-                                            className={`p-4 rounded-2xl border transition-all text-xs font-black ${
-                                                metodoPago === metodo 
-                                                ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' 
-                                                : 'bg-white/50 border-white text-muted-foreground hover:bg-white hover:border-neutral-200'
-                                            }`}
+                                            className={`p-4 rounded-2xl border transition-all text-xs font-black ${metodoPago === metodo
+                                                    ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20'
+                                                    : 'bg-white/50 border-white text-muted-foreground hover:bg-white hover:border-neutral-200'
+                                                }`}
                                         >
                                             {metodo === 'Transferencia / QR' ? '💳 QR / Transf.' : '💵 Efectivo'}
                                         </button>
@@ -169,14 +168,14 @@ const CartDrawer: React.FC = () => {
                                 <p className="text-muted-foreground font-bold text-xs uppercase tracking-tighter">Subtotal esperado</p>
                                 <p className="text-muted-foreground text-[10px] italic leading-none mt-1">*Sujeto a disponibilidad de lotes</p>
                             </div>
-                            <p className="text-3xl font-black text-primary">${total.toFixed(2)}</p>
+                            <p className="text-3xl font-black text-primary">Bs {total.toFixed(2)}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <Button variant="outline" onClick={clearCart} disabled={loading} className="rounded-2xl py-6 border-neutral-200 font-black">
                                 VACIAR
                             </Button>
-                            <Button 
-                                variant="primary" 
+                            <Button
+                                variant="primary"
                                 onClick={handleCheckout}
                                 disabled={loading}
                                 className="rounded-2xl py-6 shadow-xl shadow-primary/20 font-black tracking-widest"

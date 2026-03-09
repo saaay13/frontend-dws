@@ -108,7 +108,7 @@ const HomePage: React.FC = () => {
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         />
                                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full font-black text-slate-900 shadow-sm">
-                                            ${product.price || '0.00'}
+                                            Bs {product.price || '0.00'}
                                         </div>
                                     </div>
                                     <div>

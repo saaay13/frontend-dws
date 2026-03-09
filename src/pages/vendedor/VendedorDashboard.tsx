@@ -1,10 +1,8 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useDashboard } from '../../hooks/useDashboard';
 
 const VendedorDashboard: React.FC = () => {
-    const { user } = useAuth();
     const navigate = useNavigate();
     const { stats, loading } = useDashboard('seller');
 
@@ -35,7 +33,7 @@ const VendedorDashboard: React.FC = () => {
                 {[
                     {
                         title: 'Ventas Totales',
-                        value: `$${stats?.my_sales_total?.toLocaleString() || '0'}`,
+                        value: `Bs ${stats?.my_sales_total?.toLocaleString() || '0'}`,
                         icon: '💰',
                         color: 'emerald',
                         desc: 'Historial acumulado hoy'
@@ -116,7 +114,7 @@ const VendedorDashboard: React.FC = () => {
                                                 </div>
                                             </td>
                                             <td className="px-8 py-6 text-right">
-                                                <span className="font-black text-lg text-primary">${Number(sale.total).toLocaleString()}</span>
+                                                <span className="font-black text-lg text-primary">Bs {Number(sale.total).toLocaleString()}</span>
                                             </td>
                                         </tr>
                                     ))

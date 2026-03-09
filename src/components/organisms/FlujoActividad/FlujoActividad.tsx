@@ -41,7 +41,7 @@ const FlujoActividad: React.FC<FlujoActividadProps> = ({ activities, onViewAll }
                                     <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider">{item.subtitle}</p>
                                 </div>
                             </div>
-                            <p className="text-sm font-black text-success-dark">${item.amount}</p>
+                            <p className="text-sm font-black text-success-dark">Bs {item.amount}</p>
                         </div>
                     ))
                 ) : (

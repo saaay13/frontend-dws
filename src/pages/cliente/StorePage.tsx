@@ -80,7 +80,7 @@ const StorePage: React.FC = () => {
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         />
                                         <Badge className="absolute top-4 right-4 bg-white/80 backdrop-blur-md text-primary font-black border-none px-3 py-1">
-                                            ${product.price}
+                                            Bs {product.price}
                                         </Badge>
                                     </div>
                                     <div className="p-6 flex flex-col flex-grow">
@@ -96,8 +96,8 @@ const StorePage: React.FC = () => {
                                                 onClick={() => addToCart(product)}
                                                 disabled={product.stock <= 0}
                                                 className={`rounded-xl shadow-lg transition-all ${product.stock <= 0
-                                                        ? 'opacity-50 cursor-not-allowed bg-neutral-200 text-neutral-500 shadow-none'
-                                                        : 'shadow-primary/20 hover:shadow-primary/40 active:translate-y-1'
+                                                    ? 'opacity-50 cursor-not-allowed bg-neutral-200 text-neutral-500 shadow-none'
+                                                    : 'shadow-primary/20 hover:shadow-primary/40 active:translate-y-1'
                                                     }`}
                                             >
                                                 {product.stock <= 0 ? 'Agotado' : 'Añadir'}

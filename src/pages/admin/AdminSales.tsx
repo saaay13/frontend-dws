@@ -63,7 +63,7 @@ const AdminSales: React.FC = () => {
                             {s.state_payment}
                         </Badge>
                     </div>
-                    <span className="text-xl font-black font-mono text-primary drop-shadow-sm">${Number(s.total).toFixed(2)}</span>
+                    <span className="text-xl font-black font-mono text-primary drop-shadow-sm">Bs {Number(s.total).toFixed(2)}</span>
                 </div>
             )
         },
@@ -98,9 +98,9 @@ const AdminSales: React.FC = () => {
             header: '',
             accessor: 'actions',
             render: (s: any) => (
-                <Button 
-                    variant="outline" 
-                    size="sm" 
+                <Button
+                    variant="outline"
+                    size="sm"
                     className="rounded-2xl font-black text-[9px] h-10 px-4 hover:scale-110 active:scale-95 transition-all bg-white shadow-xl shadow-primary/5 border-primary/10 hover:border-primary text-primary"
                     onClick={() => setSelectedSale(s)}
                 >
@@ -131,7 +131,7 @@ const AdminSales: React.FC = () => {
                             <div className="absolute -right-4 -top-4 text-8xl opacity-5 group-hover:scale-125 transition-transform duration-700">💰</div>
                             <span className="text-[10px] font-black text-primary-300 uppercase tracking-widest block mb-2">Ingresos Totales</span>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-4xl font-black font-mono text-foreground">${totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                <span className="text-4xl font-black font-mono text-foreground">Bs {totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                 <Badge variant="success" size="sm" className="bg-success/20 text-success border-none">+12%</Badge>
                             </div>
                         </div>
@@ -158,7 +158,7 @@ const AdminSales: React.FC = () => {
                     <div className="glass-card rounded-[2.5rem] p-2 border border-white/10 shadow-2xl overflow-hidden">
                         <Tabla columns={columns} data={sales} loading={loading} />
                     </div>
-                    
+
                     {selectedSale && (
                         <ModalEstadoVenta
                             sale={selectedSale}

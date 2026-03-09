@@ -48,7 +48,7 @@ const ClienteDashboard: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="font-black text-lg text-neutral-900">${parseFloat(sale.total).toFixed(2)}</p>
+                                        <p className="font-black text-lg text-neutral-900">Bs {parseFloat(sale.total).toFixed(2)}</p>
                                         <span className={`text-[10px] font-black italic uppercase tracking-widest ${sale.state_sale === 'completado' || sale.state_sale === 'entregado' ? 'text-primary' : 'text-amber-600'}`}>
                                             {sale.state_sale || 'PENDIENTE'}
                                         </span>

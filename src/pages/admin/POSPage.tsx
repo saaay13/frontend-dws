@@ -93,7 +93,7 @@ const POSPage: React.FC = () => {
                                         <div className="flex justify-between items-end">
                                             <div className="flex flex-col">
                                                 <span className="text-[10px] font-bold text-muted-foreground uppercase">Precio</span>
-                                                <span className="text-2xl font-black font-mono text-foreground">${product.lots?.[0]?.precio_venta || '0.00'}</span>
+                                                <span className="text-2xl font-black font-mono text-foreground">Bs {product.lots?.[0]?.precio_venta || '0.00'}</span>
                                             </div>
                                             <Badge variant={stock < 10 ? (stock === 0 ? 'error' : 'warning') : 'success'} size="sm" className="rounded-xl px-3 font-black">
                                                 {stock} PIEZAS
@@ -127,12 +127,12 @@ const POSPage: React.FC = () => {
                                         <div className="flex flex-col min-w-0">
                                             <span className="text-[11px] font-black text-foreground truncate">{item.name}</span>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-[9px] font-mono text-primary-300 px-1 bg-primary/10 rounded">${item.price}</span>
+                                                <span className="text-[9px] font-mono text-primary-300 px-1 bg-primary/10 rounded">Bs {item.price}</span>
                                                 <span className="text-[9px] font-bold text-muted-foreground">x {item.quantity}</span>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-black font-mono text-foreground">${(item.price * item.quantity).toFixed(2)}</span>
+                                            <span className="text-sm font-black font-mono text-foreground">Bs {(item.price * item.quantity).toFixed(2)}</span>
                                             <button
                                                 onClick={() => removeFromCart(item.product_id, item.lot_id)}
                                                 className="h-6 w-6 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-lg transition-all"
@@ -200,7 +200,7 @@ const POSPage: React.FC = () => {
                                 <div className="flex justify-between items-center">
                                     <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Total</span>
                                     <span className="text-2xl font-black font-mono text-primary">
-                                        ${calculateTotal().toFixed(2)}
+                                        Bs {calculateTotal().toFixed(2)}
                                     </span>
                                 </div>
 

@@ -20,8 +20,8 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
             <div className="col-span-12 lg:col-span-8">
                 <CardEstado
                     label="Ingresos de Hoy"
-                    value={`$${stats?.revenue_today?.toLocaleString() || '0.00'}`}
-                    trend={`Total acumulado: $${stats?.total_sales?.toLocaleString() || '0'}`}
+                    value={`Bs ${stats?.revenue_today?.toLocaleString() || '0.00'}`}
+                    trend={`Total acumulado: Bs ${stats?.total_sales?.toLocaleString() || '0'}`}
                     size="lg"
                     variant="primary"
                 />

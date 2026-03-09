@@ -64,7 +64,6 @@ const Navbar: React.FC = () => {
                     </h1>
                 </div>
 
-                {/* Centered Desktop Menu */}
                 {user && (
                     <div className="hidden md:flex items-center gap-2">
                         {currentMenu.map((item) => (

@@ -77,7 +77,7 @@ const BentoDashboard: React.FC<BentoDashboardProps> = ({ stats }) => {
                         <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                         Ventas en Tiempo Real
                     </h3>
-                    <FlujoActividad activities={activities} onViewAll={() => console.log('Ver todo')} />
+                    <FlujoActividad activities={activities} />
                 </div>
             </div>
 

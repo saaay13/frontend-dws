@@ -1,5 +1,6 @@
 import React from 'react';
 import { useCategories } from '../../../hooks/useCategories';
+import { useAuth } from '../../../context/AuthContext';
 import { Tabla } from '../../molecules';
 
 interface CategoryManagerProps {
@@ -15,6 +16,7 @@ const GestorCategoria: React.FC<CategoryManagerProps> = ({
     onDelete,
     onEdit
 }) => {
+    const { user } = useAuth();
     const { categories: hookCategories, loading: hookLoading, deleteCategory: hookDelete } = useCategories();
 
     const categories = propCategories !== undefined ? propCategories : hookCategories;
@@ -55,20 +57,24 @@ const GestorCategoria: React.FC<CategoryManagerProps> = ({
             accessor: 'actions',
             render: (c: any) => (
                 <div className="flex items-center gap-2">
-                    {onEdit && (
-                        <button
-                            onClick={() => onEdit(c)}
-                            className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
-                        >
-                            ✎
-                        </button>
+                    {user?.rol === 'administrador' && (
+                        <>
+                            {onEdit && (
+                                <button
+                                    onClick={() => onEdit(c)}
+                                    className="h-9 w-9 flex items-center justify-center bg-primary/5 hover:bg-primary text-primary hover:text-white rounded-xl transition-all border border-primary/10"
+                                >
+                                    ✎
+                                </button>
+                            )}
+                            <button
+                                onClick={() => deleteCategory(c.id)}
+                                className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"
+                            >
+                                ✕
+                            </button>
+                        </>
                     )}
-                    <button
-                        onClick={() => deleteCategory(c.id)}
-                        className="h-9 w-9 flex items-center justify-center bg-error/5 hover:bg-error text-error hover:text-white rounded-xl transition-all border border-error/10"
-                    >
-                        ✕
-                    </button>
                 </div>
             )
         }

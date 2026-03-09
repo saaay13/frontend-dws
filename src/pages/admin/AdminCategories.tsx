@@ -3,9 +3,11 @@ import { GestorCategoria, CategoryForm } from '../../components/organisms';
 import { Button } from '../../components/atoms';
 import { CabeceraPaginaAdmin } from '../../components/molecules';
 import { useCategories } from '../../hooks/useCategories';
+import { useAuth } from '../../context/AuthContext';
 import { PlantillaAdmin } from '../../components/templates';
 
 const AdminCategories: React.FC = () => {
+    const { user } = useAuth();
     const [showForm, setShowForm] = useState(false);
     const { categories, loading, addCategory, updateCategory, deleteCategory, fetchCategories } = useCategories();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,10 +48,12 @@ const AdminCategories: React.FC = () => {
                     category="Catálogo"
                     subtitle="Organiza tus productos para una navegación y búsqueda eficiente."
                     action={
-                        <Button onClick={() => setShowForm(true)}
-                            className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform">
-                            <span className="mr-2">+</span> Nueva Categoría
-                        </Button>
+                        user?.rol === 'administrador' && (
+                            <Button onClick={() => setShowForm(true)}
+                                className="px-8 py-4 rounded-2xl font-black text-lg shadow-2xl shadow-primary/30 hover:scale-105 transition-transform">
+                                <span className="mr-2">+</span> Nueva Categoría
+                            </Button>
+                        )
                     }
                 />
             }

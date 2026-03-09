@@ -11,22 +11,14 @@ interface ItemActividad {
 
 interface FlujoActividadProps {
     activities: ItemActividad[];
-    onViewAll?: () => void;
 }
 
-const FlujoActividad: React.FC<FlujoActividadProps> = ({ activities, onViewAll }) => {
+const FlujoActividad: React.FC<FlujoActividadProps> = ({ activities }) => {
     return (
         <div className="glass-card p-10 rounded-[3rem] border border-white/10 shadow-2xl space-y-8 h-full">
             <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-black text-foreground tracking-tight">Movimientos</h3>
-                {onViewAll && (
-                    <button
-                        onClick={onViewAll}
-                        className="text-[10px] font-black text-primary uppercase tracking-[0.2em] hover:opacity-70 transition-opacity"
-                    >
-                        Ver todo →
-                    </button>
-                )}
+
             </div>
             <div className="space-y-2">
                 {activities?.length > 0 ? (

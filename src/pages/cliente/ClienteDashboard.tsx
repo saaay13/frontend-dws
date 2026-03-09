@@ -21,7 +21,7 @@ const ClienteDashboard: React.FC = () => {
                     <p className="text-muted-foreground mt-1">¡Hola de nuevo, <span className="text-primary font-bold">{profile?.name}</span>!</p>
                 </div>
                 <button
-                    onClick={() => navigate('/products')}
+                    onClick={() => navigate('/store')}
                     className="px-6 py-3 rounded-xl bg-primary text-white font-black text-md shadow-xl shadow-primary/20 hover:scale-[1.05] active:scale-95 transition-all"
                 >
                     Explorar Tienda

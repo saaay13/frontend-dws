@@ -11,12 +11,12 @@ interface GestorProductoProps {
     onRefresh: () => void;
 }
 
-const GestorProducto: React.FC<GestorProductoProps> = ({ 
-    products, 
-    loading, 
-    onEditProduct, 
+const GestorProducto: React.FC<GestorProductoProps> = ({
+    products,
+    loading,
+    onEditProduct,
     onDeleteProduct,
-    onRefresh 
+    onRefresh
 }) => {
     const { user } = useAuth();
     const [showLotModal, setShowLotModal] = useState<any>(null);

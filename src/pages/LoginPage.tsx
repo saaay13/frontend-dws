@@ -71,11 +71,7 @@ const LoginPage: React.FC = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                 />
-                                <div className="flex justify-end pt-1">
-                                    <button type="button" className="text-xs font-bold text-primary hover:text-primary-400 transition-colors">
-                                        ¿Olvidaste tu contraseña?
-                                    </button>
-                                </div>
+                                
                             </div>
                         </div>
                         <Button

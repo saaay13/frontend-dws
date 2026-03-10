@@ -189,9 +189,9 @@ const POSPage: React.FC = () => {
                                             onChange={(e: any) => setMetodoPago(e.target.value)}
                                             className="h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-bold outline-none"
                                         >
-                                            <option value="Efectivo" className="bg-slate-900">Efectivo</option>
-                                            <option value="Tarjeta" className="bg-slate-900">Tarjeta</option>
-                                            <option value="QR" className="bg-slate-900">QR / Transferencia</option>
+                                            <option value="Efectivo" className="bg-slate-100">Efectivo</option>
+                                            <option value="Tarjeta" className="bg-slate-100">Tarjeta</option>
+                                            <option value="QR" className="bg-slate-100">QR / Transferencia</option>
                                         </select>
                                     </div>
                                     <div className="space-y-1">
@@ -201,8 +201,8 @@ const POSPage: React.FC = () => {
                                             onChange={(e: any) => setDireccion(e.target.value === 'Tienda' ? 'Tienda Central' : 'Dirección de Envío')}
                                             className="h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[10px] font-bold outline-none"
                                         >
-                                            <option value="Tienda" className="bg-slate-900">Tienda</option>
-                                            <option value="Envio" className="bg-slate-900">Envío (Domicilio)</option>
+                                            <option value="Tienda" className="bg-slate-100">Tienda</option>
+                                            <option value="Envio" className="bg-slate-100">Envío (Domicilio)</option>
                                         </select>
                                     </div>
                                 </div>
